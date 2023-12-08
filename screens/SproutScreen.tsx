@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView, Image, Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const SomethingPrettyScreen = () => {
+const SproutScreen = () => {
   const navigation = useNavigation();
 
   const navigateToIWantToGrow = () => {
@@ -10,22 +10,22 @@ const SomethingPrettyScreen = () => {
     navigation.navigate('ChooseWhatToGrowScreen');
   };
 
-  const navigateToIWantPretty = () => {
+  const navigateToIWantSprouts = () => {
     // Navigate to IWantTastyScreen
-    navigation.navigate('StartGrowingPrettyScreen');
+    navigation.navigate('StartSproutingScreen');
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Picture or animation of something pretty */}
-      <Image source={require('./path-to-pretty-image.png')} style={styles.prettyImage} />
+      {/* Picture or animation of germination */}
+      <Image source={require('./path-to-germination-image.png')} style={styles.germinationImage} />
 
-      {/* Text "Grow" */}
-      <Text style={styles.growText}>Kasvata</Text>
+      {/* Text "Germinate" */}
+      <Text style={styles.germinateText}>Idanda</Text>
 
-      {/* Short descriptive introduction */}
+      {/* Text introducing germination */}
       <Text style={styles.introText}>
-        [Siia tuleb lühike tutvustav tekst kasvatamise kohta]
+        [Siia tuleb lühike idandamist tutvustav tekst.]
       </Text>
 
       {/* Buttons */}
@@ -34,14 +34,12 @@ const SomethingPrettyScreen = () => {
           <Text style={styles.buttonText}>Valin midagi muud</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={navigateToIWantPretty}>
-          <Text style={styles.buttonText}>Tahan taime</Text>
+        <TouchableOpacity style={styles.button} onPress={navigateToIWantSprouts}>
+          <Text style={styles.buttonText}>Tahan idusid</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 };
 
-export default SomethingPrettyScreen;
-
-
+export default SproutScreen;
