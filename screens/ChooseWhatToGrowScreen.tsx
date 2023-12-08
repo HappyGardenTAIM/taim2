@@ -1,11 +1,26 @@
 import React from 'react';
 import { SafeAreaView, View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const ChooseWhatToGrowScreen = () => {
+  const navigation = useNavigation();
+
   // Mock user data
   const userData = {
     name: 'Olen Taim',
-    image: require('./path-to-user-image.png'), // Replace with the actual path to the user's image
+    image: require('./path-to-user-image.png'), 
+  };
+
+  const navigateToSomethingTasty = () => {
+    navigation.navigate('SomethingTastyScreen'); 
+  };
+
+  const navigateToSomethingPretty = () => {
+    navigation.navigate('SomethingPrettyScreen'); 
+  };
+
+  const navigateToSprouts = () => {
+    navigation.navigate('SproutScreen');
   };
 
   return (
@@ -20,15 +35,15 @@ const ChooseWhatToGrowScreen = () => {
       <Text style={styles.growText}>Tahan kasvatada</Text>
 
       {/* Buttons */}
-      <TouchableOpacity style={styles.buttonContainer}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={navigateToSomethingTasty}>
         <Text style={styles.buttonText}>Midagi maitsvat</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.buttonContainer}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={navigateToSomethingPretty}>
         <Text style={styles.buttonText}>Midagi ilusat</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.buttonContainer}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={navigateToSprouts}>
         <Text style={styles.buttonText}>Idusid</Text>
       </TouchableOpacity>
     </SafeAreaView>
