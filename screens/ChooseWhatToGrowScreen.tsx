@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const WhatToGrowScreen = () => {
+const ChooseWhatToGrowScreen = () => {
   // Mock user data
   const userData = {
     name: 'Olen Taim',
@@ -35,4 +35,4 @@ const WhatToGrowScreen = () => {
   );
 };
 
-export default WhatToGrowScreen;
+export default ChooseWhatToGrowScreen;
