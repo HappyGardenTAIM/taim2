@@ -1,24 +1,22 @@
 import React from 'react';
-import { SafeAreaView, Image, Text, TouchableOpacity, StyleSheet, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView, Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 
-const SproutScreen = () => {
-  const navigation = useNavigation();
+const SproutScreen = ({ navigation }) => {
 
   const navigateToIWantToGrow = () => {
     // Navigate back to IWantToGrowScreen
-    navigation.navigate('ChooseWhatToGrowScreen' as never);
+    navigation.navigate('ChooseWhatToGrow' as never);
   };
 
   const navigateToIWantSprouts = () => {
     // Navigate to IWantTastyScreen
-    navigation.navigate('StartSproutingScreen' as never);
+    navigation.navigate('SomethingTastyScreen');
   };
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Picture or animation of germination */}
-      <Image source={require('./path-to-germination-image.png')} style={styles.germinationImage} />
+      {/* <Image source={require('./path-to-germination-image.png')} style={styles.germinationImage} /> */}
 
       {/* Text "Germinate" */}
       <Text style={styles.germinateText}>Idanda</Text>

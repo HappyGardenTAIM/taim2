@@ -9,7 +9,7 @@ const ChooseWhatToGrowScreen = () => {
   // Mock user data
   const userData = {
     name: 'Olen Taim',
-    image: require('../assets/olen_taim.png'),
+    image: require('../assets/taim.png'),
   };
 
   const navigateToSomethingTasty = () => {

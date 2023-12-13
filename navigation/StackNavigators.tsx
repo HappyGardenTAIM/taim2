@@ -5,27 +5,22 @@ import ChooseWhatToGrowScreen from '../screens/ChooseWhatToGrowScreen';
 import SproutScreen from '../screens/SproutScreen';
 import SomethingPrettyScreen from '../screens/SomethingPrettyScreen';
 import SomethingTastyScreen from '../screens/SomethingTastyScreen';
-
-export type RootStackParamList = {
-  Main: undefined;
-  ChooseWhatToGrow: undefined;
-  SomethingTastyScreen: undefined;
-  SomethingPrettyScreen: undefined;
-  SproutScreen: undefined;
-};
+import { NavigationContainer } from '@react-navigation/native';
 
 const Nav = createNativeStackNavigator<RootStackParamList>();
 
-function HomeTab() {
+function StackNavigator() {
   return (
-    <Nav.Navigator>
-      <Nav.Screen name="Main" component={HomeScreen} options={{ headerShown: false }} />
-      <Nav.Screen name="ChooseWhatToGrow" component={ChooseWhatToGrowScreen} />
-      <Nav.Screen name="SomethingTastyScreen" component={SomethingTastyScreen} />
-      <Nav.Screen name="SomethingPrettyScreen" component={SomethingPrettyScreen} />
-      <Nav.Screen name="SproutScreen" component={SproutScreen} />
-    </Nav.Navigator>
+    <NavigationContainer>
+      <Nav.Navigator>
+        <Nav.Screen name="Main" component={HomeScreen} options={{ headerShown: true }} />
+        <Nav.Screen name="ChooseWhatToGrow" component={ChooseWhatToGrowScreen} />
+        <Nav.Screen name="SomethingTastyScreen" component={SomethingTastyScreen} />
+        <Nav.Screen name="SomethingPrettyScreen" component={SomethingPrettyScreen} />
+        <Nav.Screen name="SproutScreen" component={SproutScreen} />
+      </Nav.Navigator> 
+    </NavigationContainer>
   );
 }
 
-export default HomeTab
+export default StackNavigator
