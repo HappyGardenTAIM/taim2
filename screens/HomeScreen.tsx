@@ -1,6 +1,7 @@
-import { SafeAreaView, Text} from 'react-native'
+import { Button, SafeAreaView, Text} from 'react-native'
 import React from 'react'
 import { gql, useQuery } from '@apollo/client'
+import { useNavigation } from '@react-navigation/native';
 
 interface User {
     id: number;
@@ -22,7 +23,14 @@ query Users {
 `
 
 const HomeScreen = () => {
-    const { data, loading } = useQuery(USERSQUERY)
+    const { data, loading } = useQuery(USERSQUERY);
+    const navigation = useNavigation();
+
+    const handleGetStartedPress = () => {
+      // Navigate to the ChooseWhatToGrow screen
+      navigation.navigate('ChooseWhatToGrow' as never);
+    };
+
     if (loading) {
         return <Text>Laen andmeid</Text>
       }
@@ -32,6 +40,9 @@ const HomeScreen = () => {
                 <Text key={user.id}>{user.name}</Text>))}
 
             <Text>Oled koduaknas</Text>	
+
+            
+            <Button title="Get Started" onPress={handleGetStartedPress} />
         </SafeAreaView>
     )
 }

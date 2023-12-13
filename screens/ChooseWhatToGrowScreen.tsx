@@ -2,25 +2,26 @@ import React from 'react';
 import { SafeAreaView, View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+
 const ChooseWhatToGrowScreen = () => {
   const navigation = useNavigation();
 
   // Mock user data
   const userData = {
     name: 'Olen Taim',
-    image: require('./path-to-user-image.png'), 
+    image: require('../assets/olen_taim.png'),
   };
 
   const navigateToSomethingTasty = () => {
-    navigation.navigate('SomethingTastyScreen'); 
+    navigation.navigate('SomethingTastyScreen' as never); 
   };
 
   const navigateToSomethingPretty = () => {
-    navigation.navigate('SomethingPrettyScreen'); 
+    navigation.navigate('SomethingPrettyScreen' as never); 
   };
 
   const navigateToSprouts = () => {
-    navigation.navigate('SproutScreen');
+    navigation.navigate('SproutScreen' as never);
   };
 
   return (
@@ -49,5 +50,46 @@ const ChooseWhatToGrowScreen = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'F5F5F5',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  userDataContainer: {
+    alignItems: 'center',
+  },
+  userImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10,
+  },
+  userName: {
+    color: '#1C0F13',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  growText: {
+    color: '#1C0F13',
+    fontSize: 20,
+    marginVertical: 10,
+  },
+  buttonContainer: {
+    backgroundColor: '#93C392', 
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 10,
+    width: '80%',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#1C0F13',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
 
 export default ChooseWhatToGrowScreen;
