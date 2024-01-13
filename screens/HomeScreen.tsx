@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import React from 'react'
-import { gql, useQuery } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 import Swiper from 'react-native-swiper';
 
 
@@ -23,24 +23,117 @@ query Users {
 }
 `
 
+const CREATE_USER_MUTATION = gql`
+mutation CreateUser($name: String, $email: String!) {
+  createUser(data: {name: $name, email: $email}) {
+    id
+    name
+    email
+    role
+  }
+}
+`
+
 const Slide = ({ content }) => (
   <View style={styles.slideContainer}>
     {content}
   </View>
 );
+
 const Splash = () => {
   
 }
-
 
 const UserList = (navigation) => {
   const handleGetStartedPress = () => {
     navigation.navigate('ChooseWhatToGrow');
   };
+
   const { data, loading } = useQuery(USERSQUERY);
+  
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [nameError, setNameError] = React.useState('');
+  const [emailError, setEmailError] = React.useState('');
+
+  const [createUser, {loading: mutationLoading, error: mutationError}] = useMutation(CREATE_USER_MUTATION, {
+    refetchQueries: [
+      USERSQUERY,
+      'Users'
+    ],
+  });
+  
+  
   if (loading) {
     return <Text>Laen andmeid</Text>
+  }  
+
+  if (mutationLoading) {
+    return <Text>Loon kasutajat</Text>
   }
+
+  if (mutationError) {
+    return <Text>Kasutaja loomine ebaõnnestus</Text>
+  }
+  
+  const handleCreateUserPress = async () => {  
+    let nameError = '';
+    let emailError = '';
+
+    if (!name) {
+      nameError = 'Nimi on kohustuslik.';
+    }
+    else if (name.length > 30 || name.length < 3) {
+      nameError = 'Nimi peab olema 3-30 tähemärki pikk.';
+    }
+    else if (data.users.some((user: User) => user.name === name)) {
+      nameError = 'Kasutaja on juba olemas.';
+    }
+
+    if (!email) {
+      emailError = 'E-mail on kohustuslik.';
+    }
+    else if (email.length > 30 || email.length < 3) {
+      emailError = 'E-mail peab olema 3-30 tähemärki pikk.';
+    }
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      emailError = 'E-mail ei ole korrektne.';
+    }
+    else if (data.users.some((user: User) => user.email === email)) {
+      emailError = 'E-mail on juba kasutusel.';
+    }
+
+    if (nameError || emailError) {
+      setNameError(nameError);
+      setEmailError(emailError);
+      return;
+    }
+    
+    setNameError('');
+    setEmailError('');
+    
+    try {
+      const { data: mutationData } = await createUser({ 
+        variables: {
+            name,
+            email 
+         },
+      })
+
+      console.log('Kasutaja loodud', mutationData);
+
+      setName('');
+      setEmail('');
+
+    } catch (error) {
+      console.log('Mutation Error:', error);
+
+      if (error.networkError && error.networkError.result) {
+        console.log('Network Errors:', error.networkError.result.errors);
+      }
+    }
+  };  
+
   return (
     <SafeAreaView>
       <View style={styles.flexContainer}>
@@ -52,11 +145,27 @@ const UserList = (navigation) => {
         </TouchableOpacity>
       </View> 
       <View style={styles.flexContainer}>
-      <Text>Loodud kasutajad: </Text>
-        {data.users.map((user: User) => (
-          <Text key={user.id}>{user.name}</Text>))}
+      <View style={styles.userList}>
+        <Text>Loodud kasutajad: </Text>        
+          {data.users.map((user: User) => (
+            <Text key={user.id}>{user.name} </Text>))}
+        </View>
       </View>
-      
+      <View style={styles.inputContainer}>
+        <View style={styles.inputRow}>
+          <TextInput style={styles.input} placeholder="Kasutajanimi" value={name} onChangeText={(text) => setName(text)} />
+          {nameError && <Text style={styles.errorText}>{nameError}</Text>}
+        </View>
+        <View style={styles.inputRow}>        
+          <TextInput style={styles.input} keyboardType='email-address' placeholder="E-mail" value={email} onChangeText={(text) => setEmail(text)} />
+          {emailError && <Text style={styles.errorText}>{emailError}</Text>}
+        </View>
+      </View>
+      <View style={styles.flexContainer}>
+        <TouchableOpacity style={styles.button} onPress={handleCreateUserPress}>
+          <Text style={styles.buttonText}>Loo kasutaja</Text>
+        </TouchableOpacity>
+      </View>  
          
     </SafeAreaView>
   ) 
@@ -66,7 +175,7 @@ const HomeScreen = ({ navigation }) => {
     
     return (
       <Swiper showsButtons={false} loop={false}>
-        <Slide content={UserList(navigation)}/>
+        <Slide content={UserList (navigation)}/>
         <Slide content={undefined} />
         <Slide content={undefined} />
       </Swiper>
@@ -104,5 +213,32 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     marginBottom: 10,
+  },
+  input: {
+    borderColor: '#93C392',
+    borderWidth: 2,
+    borderRadius: 10,
+    marginVertical: 4,
+    marginHorizontal: 10,
+    padding: 10,    
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginHorizontal: 10,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  inputRow: {
+    width: '45%',    
+  },
+  userList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    width: '100%',
+    margin: 10,
+    marginLeft: 30,
   }
 });

@@ -6,7 +6,7 @@ import StackNavigator from './navigation/StackNavigators';
 
 // Initialize Apollo Client
 const client = new ApolloClient({
-  uri: 'http://192.168.50.102:4000/graphql',
+  uri: 'http://192.168.1.162:4000/graphql',
   cache: new InMemoryCache()
 });
 
