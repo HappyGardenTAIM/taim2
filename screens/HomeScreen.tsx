@@ -2,7 +2,7 @@ import { View, Text, TextInput, StyleSheet, SafeAreaView, TouchableOpacity, Imag
 import React from 'react'
 import { gql, useMutation, useQuery } from '@apollo/client'
 import Swiper from 'react-native-swiper';
-
+import { validateEmail, validateName } from '../helpers';
 
 interface User {
     id: number;
@@ -80,28 +80,8 @@ const UserList = (navigation) => {
     let nameError = '';
     let emailError = '';
 
-    if (!name) {
-      nameError = 'Nimi on kohustuslik.';
-    }
-    else if (name.length > 30 || name.length < 3) {
-      nameError = 'Nimi peab olema 3-30 tähemärki pikk.';
-    }
-    else if (data.users.some((user: User) => user.name === name)) {
-      nameError = 'Kasutaja on juba olemas.';
-    }
-
-    if (!email) {
-      emailError = 'E-mail on kohustuslik.';
-    }
-    else if (email.length > 30 || email.length < 3) {
-      emailError = 'E-mail peab olema 3-30 tähemärki pikk.';
-    }
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      emailError = 'E-mail ei ole korrektne.';
-    }
-    else if (data.users.some((user: User) => user.email === email)) {
-      emailError = 'E-mail on juba kasutusel.';
-    }
+    nameError = validateName(name);
+    emailError = validateEmail(email);
 
     if (nameError || emailError) {
       setNameError(nameError);
