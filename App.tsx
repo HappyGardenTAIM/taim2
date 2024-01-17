@@ -1,12 +1,23 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { AppRegistry } from 'react-native';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, ApolloLink } from '@apollo/client';
 import StackNavigator from './navigation/StackNavigators';
+import {GRAPHQL_URL} from "@env";
+
+const httpLink = new HttpLink({ uri: GRAPHQL_URL });
+
+const logLink = new ApolloLink((operation, forward) => {
+  console.log(`GraphQL Request: ${operation.operationName}`);
+  return forward(operation).map(response => {
+    console.log(`GraphQL Response: ${operation.operationName}`, response);
+    return response;
+  });
+});
 
 // Initialize Apollo Client
 const client = new ApolloClient({
-  uri: 'http://192.168.1.162:4000/graphql',
+  link: ApolloLink.from([logLink, httpLink]),
   cache: new InMemoryCache()
 });
 

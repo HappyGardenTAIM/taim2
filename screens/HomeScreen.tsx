@@ -50,7 +50,7 @@ const UserList = (navigation) => {
   };
 
   const { data, loading } = useQuery(USERSQUERY);
-  
+
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [nameError, setNameError] = React.useState('');
@@ -80,8 +80,8 @@ const UserList = (navigation) => {
     let nameError = '';
     let emailError = '';
 
-    nameError = validateName(name);
-    emailError = validateEmail(email);
+    nameError = validateName(name, data);
+    emailError = validateEmail(email, data);
 
     if (nameError || emailError) {
       setNameError(nameError);
