@@ -126,8 +126,8 @@ const UserList = (navigation) => {
       </View> 
       <View style={styles.flexContainer}>
       <View style={styles.userList}>
-        <Text>Loodud kasutajad: </Text>        
-          {data.users.map((user: User) => (
+        <Text>Loodud kasutajad:</Text>        
+          {data?.users?.map((user: User) => (
             <Text key={user.id}>{user.name} </Text>))}
         </View>
       </View>

@@ -8,6 +8,7 @@ import {GRAPHQL_URL} from "@env";
 const httpLink = new HttpLink({ uri: GRAPHQL_URL });
 
 const logLink = new ApolloLink((operation, forward) => {
+  console.log(GRAPHQL_URL);
   console.log(`GraphQL Request: ${operation.operationName}`);
   return forward(operation).map(response => {
     console.log(`GraphQL Response: ${operation.operationName}`, response);
