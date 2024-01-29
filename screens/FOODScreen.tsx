@@ -1,23 +1,23 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 
-const SomethingPrettyScreen = ({ navigation }) => {
+const FOODScreen = ({ navigation }) => {
 
   const navigateToIWantToGrow = () => {
     // Navigate back to IWantToGrowScreen
     navigation.navigate('ChooseWhatToGrow');
   };
 
-  const navigateToIWantPretty = () => {
+  const navigateToIWantTasty = () => {
     // Navigate to IWantTastyScreen
-    navigation.navigate('SomethingTastyScreen');
+    navigation.navigate('FOODScreen');
   };
 
   return (
-    <SafeAreaView >
-      {/* Picture or animation of something pretty */}
-      {/* <Image source={require('./path-to-pretty-image.png')} style={styles.prettyImage} /> */}
-
+    <SafeAreaView style={styles.container}>
+      {/* Picture or animation of something tasty */}
+{/*       <Image source={require('./path-to-tasty-image.png')} style={styles.tastyImage} />
+ */}
       {/* Text "Grow" */}
       <Text style={styles.growText}>Kasvata</Text>
 
@@ -32,7 +32,7 @@ const SomethingPrettyScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>Valin midagi muud</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={navigateToIWantPretty}>
+        <TouchableOpacity style={styles.button} onPress={navigateToIWantTasty}>
           <Text style={styles.buttonText}>Tahan taime</Text>
         </TouchableOpacity>
       </View>
@@ -40,7 +40,7 @@ const SomethingPrettyScreen = ({ navigation }) => {
   );
 };
 
-export default SomethingPrettyScreen;
+export default FOODScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginVertical: 10,
-    textAlign: 'center',
   },
   introText: {
     color: '#1C0F13',
@@ -88,5 +87,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-

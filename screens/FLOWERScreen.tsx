@@ -1,23 +1,23 @@
 import React from 'react';
-import { SafeAreaView, Text, TouchableOpacity, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const SomethingTastyScreen = ({ navigation }) => {
+const FLOWERScreen = ({ navigation }) => {
 
   const navigateToIWantToGrow = () => {
     // Navigate back to IWantToGrowScreen
     navigation.navigate('ChooseWhatToGrow');
   };
 
-  const navigateToIWantTasty = () => {
+  const navigateToIWantPretty = () => {
     // Navigate to IWantTastyScreen
-    navigation.navigate('SomethingTastyScreen');
+    navigation.navigate('FOODScreen');
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Picture or animation of something tasty */}
-{/*       <Image source={require('./path-to-tasty-image.png')} style={styles.tastyImage} />
- */}
+    <SafeAreaView >
+      {/* Picture or animation of something pretty */}
+      {/* <Image source={require('./path-to-pretty-image.png')} style={styles.prettyImage} /> */}
+
       {/* Text "Grow" */}
       <Text style={styles.growText}>Kasvata</Text>
 
@@ -32,7 +32,7 @@ const SomethingTastyScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>Valin midagi muud</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={navigateToIWantTasty}>
+        <TouchableOpacity style={styles.button} onPress={navigateToIWantPretty}>
           <Text style={styles.buttonText}>Tahan taime</Text>
         </TouchableOpacity>
       </View>
@@ -40,7 +40,7 @@ const SomethingTastyScreen = ({ navigation }) => {
   );
 };
 
-export default SomethingTastyScreen;
+export default FLOWERScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginVertical: 10,
+    textAlign: 'center',
   },
   introText: {
     color: '#1C0F13',
@@ -87,3 +88,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+

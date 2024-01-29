@@ -1,9 +1,9 @@
 declare type RootStackParamList = {
     Main: undefined;
     ChooseWhatToGrow: undefined;
-    SomethingTastyScreen: undefined;
-    SomethingPrettyScreen: undefined;
-    SproutScreen: undefined;
+    FOODScreen: undefined;
+    FLOWERScreen: undefined;
+    SPROUTScreen: undefined;
 }
 
 enum rolesEnum {

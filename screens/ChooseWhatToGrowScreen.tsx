@@ -1,7 +1,19 @@
 import React from 'react';
 import { SafeAreaView, View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { gql, useMutation, useQuery } from '@apollo/client';
 
+const GET_JOURNEY_TYPES = gql`
+  query GetJourneyTypes {
+    journeyTypes
+  }
+`;
+
+const journeyTypeDisplayText = {
+  SPROUT: 'Idusid',
+  FOOD: 'Midagi maitsvat',
+  FLOWER: 'Midagi ilusat',
+};
 
 const ChooseWhatToGrowScreen = () => {
   const navigation = useNavigation();
@@ -12,17 +24,20 @@ const ChooseWhatToGrowScreen = () => {
     image: require('../assets/taim.png'),
   };
 
-  const navigateToSomethingTasty = () => {
-    navigation.navigate('SomethingTastyScreen' as never); 
+  const navigateToJourney = (journeyType) => {
+    navigation.navigate(`${journeyType}Screen` as never); 
   };
 
-  const navigateToSomethingPretty = () => {
-    navigation.navigate('SomethingPrettyScreen' as never); 
-  };
+  const { loading, error, data } = useQuery(GET_JOURNEY_TYPES);
 
-  const navigateToSprouts = () => {
-    navigation.navigate('SproutScreen' as never);
-  };
+  if (loading) return <Text>Laen andmeid...</Text>;
+  if (error) return <Text>Error: {error.message}</Text>;
+
+  const journeyTypes = data?.journeyTypes;
+
+  const displayTextForSPROUT = journeyTypeDisplayText.SPROUT;
+  const displayTextForFOOD = journeyTypeDisplayText.FOOD;
+  const displayTextForFLOWER = journeyTypeDisplayText.FLOWER;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -36,17 +51,15 @@ const ChooseWhatToGrowScreen = () => {
       <Text style={styles.growText}>Tahan kasvatada</Text>
 
       {/* Buttons */}
-      <TouchableOpacity style={styles.buttonContainer} onPress={navigateToSomethingTasty}>
-        <Text style={styles.buttonText}>Midagi maitsvat</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.buttonContainer} onPress={navigateToSomethingPretty}>
-        <Text style={styles.buttonText}>Midagi ilusat</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.buttonContainer} onPress={navigateToSprouts}>
-        <Text style={styles.buttonText}>Idusid</Text>
-      </TouchableOpacity>
+      {journeyTypes && journeyTypes.map((journeyType) => (
+        <TouchableOpacity
+          key={journeyType}
+          style={styles.buttonContainer}
+          onPress={() => navigateToJourney(journeyType)}
+        >
+          <Text style={styles.buttonText}>{`${journeyTypeDisplayText[journeyType]}`}</Text>
+        </TouchableOpacity>
+      ))}
     </SafeAreaView>
   );
 };

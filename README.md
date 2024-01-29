@@ -10,9 +10,9 @@ Instructions are for Windows computer and Android phone.
 
 ## Table of Contents
 
+- [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
 
@@ -60,11 +60,15 @@ Make sure Docker is running.
 OR
 * Use the Expo app on your smartphone and connect it to your development computer via USB. Follow instructions [here](https://reactnative.dev/docs/running-on-device).
 
+Start both the backend and frontend part of the project with
+
 ```npm start```
 
-## Contributing
+After the Metro Bundler has started, type
+```a```
+to open app in the emulator or on the physical phone.
+Type ```r``` to refresh as needed.
 
-Guidelines for contributing to your project.
 
 ## License
 
@@ -72,5 +76,5 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-- Email: your-email@example.com
-- GitHub: [Your GitHub Username](https://github.com/your-username)
+- Email: happygardentaim@gmail.com
+- GitHub: [peeptani](https://github.com/peeptani)

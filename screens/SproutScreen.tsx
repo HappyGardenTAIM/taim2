@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 
-const SproutScreen = ({ navigation }) => {
+const SPROUTScreen = ({ navigation }) => {
 
   const navigateToIWantToGrow = () => {
     // Navigate back to IWantToGrowScreen
@@ -10,7 +10,7 @@ const SproutScreen = ({ navigation }) => {
 
   const navigateToIWantSprouts = () => {
     // Navigate to IWantTastyScreen
-    navigation.navigate('SomethingTastyScreen');
+    navigation.navigate('SPROUTScreen');
   };
 
   return (
@@ -86,4 +86,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SproutScreen;
+export default SPROUTScreen;
