@@ -3,6 +3,7 @@ import React from 'react'
 import { gql, useMutation, useQuery } from '@apollo/client'
 import Swiper from 'react-native-swiper';
 import { validateEmail, validateName } from '../helpers';
+import NotificationTestScreen from './NotificationTestScreen';
 
 interface User {
     id: number;
@@ -151,13 +152,20 @@ const UserList = (navigation) => {
   ) 
 }
 
+const NotificationTest = () => {
+  return (
+    <View>
+      <NotificationTestScreen></NotificationTestScreen>
+    </View>
+  )
+}
+
 const HomeScreen = ({ navigation }) => {
     
     return (
-      <Swiper showsButtons={false} loop={false}>
+      <Swiper showsButtons={true} loop={false}>
         <Slide content={UserList (navigation)}/>
-        <Slide content={undefined} />
-        <Slide content={undefined} />
+        <Slide content={UserList (navigation)}/>
       </Swiper>
         
     )

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Taim2",
-    "slug": "Taim2",
+    "slug": "taim2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,10 +21,27 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "googleServicesFile": "./google-services.json",
+      "package": "ee.taim2.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification.png",
+          "color": "#ffffff"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "f22f0c8a-683e-464f-b9d1-ac63217956ad"
+      }
+    },
+    "owner": "taim2"
   }
 }

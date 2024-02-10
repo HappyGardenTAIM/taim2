@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "68808904978",
+    "project_id": "taim2-410ae",
+    "storage_bucket": "taim2-410ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:68808904978:android:7bbc92ad0fbc5bc6a963cb",
+        "android_client_info": {
+          "package_name": "ee.taim2.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLjvIQG4yvPmQOVNNVvG_XiY8zo5XtgwM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
