@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { gql, useQuery } from '@apollo/client';
 import * as SecureStore from 'expo-secure-store';
@@ -58,10 +59,19 @@ const ChooseWhatToGrowScreen = () => {
   // if (error) return <Text>Error: {error.message}</Text>;
 
   const journeyTypes = data?.journeyTypes;
+  
+  const navigateToJourney = (journeyType) => {
+    storeJourneyType(journeyType);
+    navigation.navigate(`${journeyType}Screen` as never);
+  };
 
-  const displayTextForSPROUT = journeyTypeDisplayText.SPROUT;
-  const displayTextForFOOD = journeyTypeDisplayText.FOOD;
-  const displayTextForFLOWER = journeyTypeDisplayText.FLOWER;
+  const storeJourneyType = async (journeyType) => {
+    try {
+      await AsyncStorage.setItem('selectedJourney', journeyType);
+    } catch (error) {
+      console.error('Error storing journey type:', error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -76,13 +86,13 @@ const ChooseWhatToGrowScreen = () => {
 
       {/* Buttons */}
       {journeyTypes && journeyTypes.map((journeyType) => (
-        <TouchableOpacity
-          key={journeyType}
-          style={styles.buttonContainer}
-          onPress={() => navigateToJourney(journeyType)}
-        >
-          <Text style={styles.buttonText}>{`${journeyTypeDisplayText[journeyType]}`}</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            key={journeyType}            
+            style={styles.buttonContainer}
+            onPress={() => navigateToJourney(journeyType)}
+          >
+            <Text style={styles.buttonText}>{`${journeyTypeDisplayText[journeyType]}`}</Text>
+          </TouchableOpacity>
       ))}
     </SafeAreaView>
   );

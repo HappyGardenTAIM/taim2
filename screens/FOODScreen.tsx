@@ -10,7 +10,7 @@ const FOODScreen = ({ navigation }) => {
 
   const navigateToIWantTasty = () => {
     // Navigate to IWantTastyScreen
-    navigation.navigate('FOODScreen');
+    navigation.navigate('SelectFoodScreen');
   };
 
   return (
