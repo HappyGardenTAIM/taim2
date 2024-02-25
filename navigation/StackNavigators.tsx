@@ -2,7 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import ChooseWhatToGrowScreen from '../screens/ChooseWhatToGrowScreen'; 
-import SPROUTScreen from '../screens/SPROUTScreen';
+import SPROUTScreen from '../screens/SproutScreen';
 import FLOWERScreen from '../screens/FLOWERScreen';
 import FOODScreen from '../screens/FOODScreen';
 import { NavigationContainer } from '@react-navigation/native';

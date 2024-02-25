@@ -4,6 +4,7 @@ import { gql, useMutation, useQuery } from '@apollo/client'
 import Swiper from 'react-native-swiper';
 import { validateEmail, validateName } from '../helpers';
 import NotificationTestScreen from './NotificationTestScreen';
+import NavigationButton from '../components/NavigationButton';
 
 interface User {
     id: number;
@@ -35,7 +36,7 @@ mutation CreateUser($name: String, $email: String!) {
 }
 `
 
-const Slide = ({ content }) => (
+const Slide = ({ content}) => (
   <View style={styles.slideContainer}>
     {content}
   </View>
@@ -121,6 +122,36 @@ const UserList = (navigation) => {
         <Image source={require('../assets/taim.png')} style={styles.splashImage}/>
       </View> 
       <View style={styles.flexContainer}>
+        <NavigationButton
+          buttons={[
+            {
+              label: 'Minu taimed',
+              screenName: 'FLOWERScreen', 
+            },
+          ]}
+        />
+      </View>
+      <View style={styles.flexContainer}>
+        <NavigationButton
+          buttons={[
+            {
+              label: 'Minu teekond',
+              screenName: 'FOODScreen', 
+            },
+          ]}
+        />
+      </View>
+      <View style={styles.flexContainer}>
+        <NavigationButton
+          buttons={[
+            {
+              label: 'Minu seaded',
+              screenName: 'SPROUTScreen', 
+            },
+          ]}
+        />
+      </View>
+      {/* <View style={styles.flexContainer}>
         <TouchableOpacity style={styles.button} onPress={handleGetStartedPress}>
           <Text style={styles.buttonText}>Alusta</Text>
         </TouchableOpacity>
@@ -146,17 +177,16 @@ const UserList = (navigation) => {
         <TouchableOpacity style={styles.button} onPress={handleCreateUserPress}>
           <Text style={styles.buttonText}>Loo kasutaja</Text>
         </TouchableOpacity>
-      </View>  
+      </View>   */}
          
     </SafeAreaView>
   ) 
 }
 
 const NotificationTest = () => {
+  console.log('NotificationTest');
   return (
-    <View>
       <NotificationTestScreen></NotificationTestScreen>
-    </View>
   )
 }
 
@@ -164,10 +194,19 @@ const HomeScreen = ({ navigation }) => {
     
     return (
       <Swiper showsButtons={true} loop={false}>
+        {/* <View style={styles.slideContainer}>
+        <NavigationButton
+          buttons={[
+            { label: 'Minu taimed', screenName: 'HomeScreen' },
+            { label: 'Minu teekond', screenName: 'HomeScreen' },
+            { label: 'Minu seaded', screenName: 'HomeScreen' },
+            // Add more buttons as needed
+          ]}
+        />
+      </View> */}
         <Slide content={UserList (navigation)}/>
-        <Slide content={UserList (navigation)}/>
-      </Swiper>
-        
+        <Slide content={NotificationTest()}/>
+      </Swiper>   
     )
 }
 
@@ -175,8 +214,10 @@ export default HomeScreen
 
 const styles = StyleSheet.create({
   slideContainer: {
+    flex: 1,
     backgroundColor: '#f1ffff',
-    height: '100%'
+    height: '100%',
+    alignItems: 'center',
   },
   button: {
     backgroundColor: '#93C392',
@@ -185,6 +226,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginHorizontal: 10,
     width: '45%',
+    alignSelf: 'center',
   },
   buttonText: {
     color: '#1C0F13',
@@ -192,15 +234,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  buttonLabel: {
+    color: '#F5F5F5',
+    fontSize: 16,
+  },
   flexContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    // justifyContent: 'space-around', 
+    alignItems: 'center',
     width: '100%',
   },
   splashImage: {
     width: 200,
     height: 200,
     marginBottom: 10,
+    alignSelf: 'center',
   },
   input: {
     borderColor: '#93C392',
