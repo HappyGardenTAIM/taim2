@@ -78,6 +78,7 @@ function NotificationTestScreen() {
   const responseListener = useRef<Subscription | undefined>();
 
   useEffect(() => {
+    console.log();
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {

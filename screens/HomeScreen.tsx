@@ -6,13 +6,14 @@ import { validateEmail, validateName } from '../helpers';
 import NotificationTestScreen from './NotificationTestScreen';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
+import NavigationButton from '../components/NavigationButton';
 
 interface User {
-    id: number;
-    email: string;
-    name: string;
-    role: rolesEnum;
-  }
+  id: number;
+  email: string;
+  name: string;
+  role: rolesEnum;
+}
 
 const USERSQUERY = gql`
 query Users {
@@ -43,7 +44,7 @@ const Slide = ({ content }) => (
 );
 
 const Splash = () => {
-  
+
 }
 
 const UserList = (navigation) => {
@@ -68,6 +69,10 @@ const UserList = (navigation) => {
     } catch (error) {
       console.error('Error checking stored user ID:', error);
     }
+      
+  const handleGetStartedPress = () => {
+    navigation.navigate('ChooseWhatToGrow');
+
   };
 
   const { data, loading } = useQuery(USERSQUERY);
@@ -83,8 +88,8 @@ const UserList = (navigation) => {
       'Users'
     ],
   });
-  
-  
+
+
   if (loading) {
     return <Text>Laadin andmeid</Text>
   }  
@@ -96,7 +101,7 @@ const UserList = (navigation) => {
   if (mutationError) {
     return <Text>Kasutaja loomine ebaõnnestus</Text>
   }
-  
+
   const handleCreateUserPress = async () => {  
     let nameError = '';
   //   let emailError = '';
@@ -134,9 +139,8 @@ const UserList = (navigation) => {
     } catch (error) {
       console.log('Mutation Error:', error);
 
-      if (error.networkError && error.networkError.result) {
-        console.log('Network Errors:', error.networkError.result.errors);
-      }
+    if (error.networkError && error.networkError.result) {
+      console.log('Network Errors:', error.networkError.result.errors);
     }
 
     navigation.navigate('ChooseWhatToGrow');
@@ -161,9 +165,15 @@ const UserList = (navigation) => {
       <View style={styles.flexContainer}>
       <View style={styles.userList}>
         <Text>Loodud kasutajad:</Text>        
-          {data?.users?.map((user: User) => (
-            <Text key={user.id}>{user.name} </Text>))}
-        </View>
+        {data?.users?.map((user: User) => (
+          <Text key={user.id}>{user.name} </Text>
+        ))}
+      </View>
+    </View>
+    <View style={styles.inputContainer}>
+      <View style={styles.inputRow}>
+        <TextInput style={styles.input} placeholder="Kasutajanimi" value={name} onChangeText={(text) => setName(text)} />
+        {nameError && <Text style={styles.errorText}>{nameError}</Text>}
       </View>
 
       <View style={styles.flexContainer}>
@@ -188,6 +198,7 @@ const NotificationTest = () => {
     </View>
   )
 }
+
 
 const HomeScreen = ({ navigation }) => {    
   return (
