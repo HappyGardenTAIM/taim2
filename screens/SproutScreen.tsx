@@ -1,6 +1,7 @@
 import React from 'react';
-import { SafeAreaView, Text, StyleSheet, View } from 'react-native';
+import { SafeAreaView, Text, StyleSheet } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const SPROUTScreen = () => {
 
@@ -10,52 +11,52 @@ const SPROUTScreen = () => {
   ];
 
   return (
-    <SafeAreaView style={styles.flexContainer}>
-      {/* Picture or animation of germination */}
-      <View style={styles.container}>
-        <Text style={styles.germinateText}>Idanda</Text>
-        <Text style={styles.introText}>
-          [Siia tuleb lühike idandamist tutvustav tekst.]
-        </Text>
-      </View>
-      {/* Buttons */}
-      <View style={styles.buttonContainer}>
-        <NavigationButton buttons={buttonConfigurations} />
-      </View>
+    <SafeAreaView style={styles.container}>
+      <MaterialCommunityIcons name="seed-outline" size={100} color="black" margin={30}/>
+      
+      <Text style={styles.largeText}>Idanda</Text>
+    
+      <Text style={styles.introText}>
+      Lihtsaim ja kiireim viis kasvatada ise midagi värsket. Leota seemneid vees, loputa kaks korda päevas ja mõne päevaga ongi krõmpsud idud valmis!
+      </Text>
+
+      {/* Buttons */}       
+      <NavigationButton buttons={buttonConfigurations}
+      buttonStyle={styles.button}
+      containerStyle={{flexDirection: 'row'}}/>
+
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  flexContainer: {
-    flex: 1,
+  button: {
+    backgroundColor: '#93C392',
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 10,
+    width: '45%',
+  },
+  container: {
+    alignItems: 'center',
     backgroundColor: '#F5F5F5',
     justifyContent: 'center',
   },
-  container: { 
-    alignItems: 'center',
-  },
-  germinationImage: {
-    width: '100%',
-    height: '30%',
-    resizeMode: 'cover',
-  },
-  germinateText: {
-    color: '#1C0F13',
-    fontSize: 24,
+  largeText: {
+    fontSize: 34,
     fontWeight: 'bold',
+    textAlign: 'center',
     marginVertical: 10,
+    color: '#93C385',
+    marginHorizontal: 10,
+    lineHeight: 35,
   },
   introText: {
-    color: '#1C0F13',
-    fontSize: 16,
+    fontSize: 20,
     textAlign: 'center',
-    marginHorizontal: 20,
-    marginBottom: 20,
-  },
-  buttonContainer: {
-    justifyContent: 'space-around',
-    flexDirection: 'row',
+    marginHorizontal: 30,
+    marginVertical: 20,
   },
 });
 

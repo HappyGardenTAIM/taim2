@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Image, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, Image, StyleSheet, Text, View } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
 import * as SecureStore from 'expo-secure-store';
 
 const UserHomeScreen = () => {
 
-  const [userName, setUserName] = useState('');
-
-  
+  const [userName, setUserName] = useState('');  
 
   const fetchUserName = async () => {
     try {
@@ -38,7 +36,11 @@ const UserHomeScreen = () => {
     <SafeAreaView style={styles.container}>
       <Image source={require('../assets/taim.png')} style={styles.splashImage}/>
       <Text style={styles.largeText}>{userName ? `Tere, ${userName}!` : 'Tere!'}</Text>
-      <NavigationButton buttons={buttonConfigurations} />
+      <View style={styles.buttonContainer}>
+        <NavigationButton 
+          buttons={buttonConfigurations}
+          buttonStyle={{width: '70%'}} />
+      </View>
     </SafeAreaView>
   );
 };
@@ -47,6 +49,11 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'F5F5F5',
+  },
+  buttonContainer: {
+    width: '75%',
+    marginTop: 25,
   },
   splashImage: {
     width: 200,
@@ -55,10 +62,10 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   largeText: {
-    fontSize: 24,
+    fontSize: 34,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginVertical: 15,
+    marginVertical: 10,
     color: '#93C385',
     marginHorizontal: 10,
     lineHeight: 35,

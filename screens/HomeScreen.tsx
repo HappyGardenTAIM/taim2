@@ -57,12 +57,11 @@ const HomeScreen = ({ navigation }) => {
       };
       checkStoredUserId();
     }, [])
-  );
-    
+  );    
   
   const handleIndexChanged = (index) => {
     setActiveSlideIndex(index);
-  };
+  };  
    
   return (
     <Swiper 
@@ -80,7 +79,7 @@ export default HomeScreen
 
 const styles = StyleSheet.create({
   slideContainer: {
-    backgroundColor: '#f1ffff',
+    backgroundColor: '#F5F5F5',
     height: '100%'
   },  
 });

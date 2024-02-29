@@ -1,6 +1,8 @@
 import React from 'react';
-import { SafeAreaView, Text, TouchableOpacity, StyleSheet, View } from 'react-native';
+import { SafeAreaView, Text, StyleSheet, View } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faSeedling } from '@fortawesome/free-solid-svg-icons';
 
 const FOODScreen = () => {
 
@@ -10,18 +12,20 @@ const FOODScreen = () => {
   ];
 
   return (
-    <SafeAreaView style={styles.flexContainer}>
-      {/* Picture or animation of food plant */}
-      <View style={styles.container}>
-        <Text style={styles.growText}>Kasvata</Text>
+    <SafeAreaView style={styles.container}>
+      <FontAwesomeIcon icon={faSeedling} size={100} style={styles.icon} />
+      
+        <Text style={styles.largeText}>Kasvata</Text>
         <Text style={styles.introText}>
-          [Siia tuleb lühike toidutaime kasvatamist tutvustav tekst.]
+          Pane seeme mulda, anna talle päikesevalgust ja vett ning õige pea saad suhu pista midagi maitsvat!
         </Text>
-      </View>
+      
       {/* Buttons */}
-      <View style={styles.buttonContainer}>
-        <NavigationButton buttons={buttonConfigurations} />
-      </View>
+      
+      <NavigationButton buttons={buttonConfigurations}
+      buttonStyle={styles.button}
+      containerStyle={{flexDirection: 'row'}}/>
+     
     </SafeAreaView>
   );
 };
@@ -29,19 +33,23 @@ const FOODScreen = () => {
 export default FOODScreen;
 
 const styles = StyleSheet.create({
-  flexContainer: {
-    flex: 1,
+  container: { 
+    alignItems: 'center',
     backgroundColor: '#F5F5F5',
     justifyContent: 'center',
   },
-  container: { 
-    alignItems: 'center',
+  icon: {
+    marginTop: 60,
+    marginBottom: 30,
   },
-  growText: {
-    color: '#1C0F13',
-    fontSize: 24,
+  largeText: {
+    fontSize: 34,
     fontWeight: 'bold',
+    textAlign: 'center',
     marginVertical: 10,
+    color: '#93C385',
+    marginHorizontal: 10,
+    lineHeight: 35,
   },
   introText: {
     color: '#1C0F13',
@@ -50,8 +58,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 20,
   },
-  buttonContainer: {
-    justifyContent: 'space-around',
-    flexDirection: 'row',
+  button: {
+    backgroundColor: '#93C392',
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 10,
+    width: '45%',
   },
 });

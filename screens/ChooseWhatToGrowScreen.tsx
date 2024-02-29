@@ -19,7 +19,23 @@ const journeyTypeDisplayText = {
 
 const ChooseWhatToGrowScreen = () => {
 
+  // Check if user has already selected a journey type and navigate to that screen
+  
+  // const checkAndNavigate = async () => {
+  //   const storedJourneyType = await AsyncStorage.getItem('selectedJourney');
+  //   if (storedJourneyType) {
+  //     navigation.navigate(`${storedJourneyType}Screen` as never);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   checkAndNavigate();
+  // }, []);
+
+
   const navigation = useNavigation();
+
+  // Fetch user name from SecureStore for displaying a greeting
 
   const [userName, setUserName] = useState('');
 
@@ -42,23 +58,18 @@ const ChooseWhatToGrowScreen = () => {
     fetchUserName().then((name) => setUserName(name));
   }, []);
 
+
+  // Fetch journey types from the server
+
   const { loading, error, data } = useQuery(GET_JOURNEY_TYPES);
 
-  // const checkAndNavigate = async () => {
-  //   const storedJourneyType = await AsyncStorage.getItem('selectedJourney');
-  //   if (storedJourneyType) {
-  //     navigation.navigate(`${storedJourneyType}Screen` as never);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   checkAndNavigate();
-  // }, []);
-
-  // if (loading) return <Text>Laen andmeid...</Text>;
-  // if (error) return <Text>Error: {error.message}</Text>;
+  if (loading) return <Text>Laen andmeid...</Text>;
+  if (error) return <Text>Error: {error.message}</Text>;    
 
   const journeyTypes = data?.journeyTypes;
+
+
+  // Store the selected journey type and navigate to the selected journey type screen
   
   const navigateToJourney = (journeyType) => {
     storeJourneyType(journeyType);
@@ -74,25 +85,23 @@ const ChooseWhatToGrowScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* User's image and data */}
-      <View style={styles.userDataContainer}>
-        <Image source={require('../assets/taim.png')} style={styles.userImage} />
-        <Text style={styles.userName}>{userName ? `Tere, ${userName}!` : 'Tere!'}</Text>
+    <SafeAreaView style={styles.container}>      
+      <View >
+        <Image source={require('../assets/taim.png')} style={styles.splashImage} />
+        <Text style={styles.largeText}>{userName ? `Tere, ${userName}!` : 'Tere!'}</Text>
       </View>
 
-      {/* Text "Tahan kasvatada" */}
-      <Text style={styles.growText}>Tahan kasvatada</Text>
+      <Text style={styles.text}>Tahan kasvatada</Text>
 
       {/* Buttons */}
       {journeyTypes && journeyTypes.map((journeyType) => (
-          <TouchableOpacity
-            key={journeyType}            
-            style={styles.buttonContainer}
-            onPress={() => navigateToJourney(journeyType)}
-          >
-            <Text style={styles.buttonText}>{`${journeyTypeDisplayText[journeyType]}`}</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+          key={journeyType}            
+          style={styles.button}
+          onPress={() => navigateToJourney(journeyType)}
+        >
+          <Text style={styles.buttonText}>{`${journeyTypeDisplayText[journeyType]}`}</Text>
+        </TouchableOpacity>
       ))}
     </SafeAreaView>
   );
@@ -100,36 +109,35 @@ const ChooseWhatToGrowScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: 'F5F5F5',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  userDataContainer: {
-    alignItems: 'center',
-  },
-  userImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+  splashImage: {
+    width: 200,
+    height: 200,
     marginBottom: 10,
+    marginTop: 30,
   },
-  userName: {
-    color: '#93C385',
-    fontSize: 28,
+  largeText: {
+    fontSize: 34,
     fontWeight: 'bold',
-  },
-  growText: {
-    color: '#1C0F13',
-    fontSize: 20,
+    textAlign: 'center',
     marginVertical: 10,
+    color: '#93C385',
+    marginHorizontal: 10,
+    lineHeight: 35,
   },
-  buttonContainer: {
+  text: {
+    fontSize: 22,
+    marginVertical: 20,
+  },
+  button: {
     backgroundColor: '#93C392', 
     padding: 15,
     borderRadius: 10,
     marginVertical: 10,
-    width: '80%',
+    width: '75%',
     alignItems: 'center',
   },
   buttonText: {

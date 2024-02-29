@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Text, TouchableOpacity, StyleSheet, View, Image, ImageBackground, Modal } from 'react-native';
+import { SafeAreaView, Text, TouchableOpacity, StyleSheet, View, ImageBackground, Modal, ScrollView } from 'react-native';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as SecureStore from 'expo-secure-store';
@@ -185,35 +185,40 @@ const SelectSproutScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Picture or animation of something sprouting */}
 
-      <Text style={styles.header}>Vali oma taim</Text>
+      <Text style={styles.largeText}>Vali oma taim</Text>
       
-      <View style={styles.imageContainer}>
-        {plantList.map((plant, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.plantContainer}
-            onPress={() => setSelectedPlant(plant)}
-          >     
-            <ImageBackground
-              defaultSource={placeholder}
-              source={{ uri: plant.image }}
-              style={styles.plantImage}
-              alt={plant.name}
-            >  
-              <View style={styles.overlay}> 
-                <Text style={styles.imageTitle}>{plant.name}</Text>
-                <View style={styles.infoContainer}>
-                  {renderDifficultyIcons(plant.difficulty)}   
-                </View>   
-                <Text style={styles.imageText}>{plant.minGrowthTime}-{plant.maxGrowthTime} päeva</Text>                                     
-              </View>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <View style={styles.imageContainer}>
+          {plantList.map((plant, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.plantContainer}
+              onPress={() => setSelectedPlant(plant)}
+            >     
+              <ImageBackground
+                defaultSource={placeholder}
+                source={{ uri: plant.image }}
+                style={styles.plantImage}
+                alt={plant.name}
+              >  
+                <View style={styles.overlay}> 
+                  <Text style={styles.imageTitle}>{plant.name}</Text>
+                  <View style={styles.infoContainer}>
+                    <View style={styles.infoContainer}>
+                      {renderDifficultyIcons(plant.difficulty)}
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={styles.imageText}>{plant.minGrowthTime}-{plant.maxGrowthTime} päeva</Text>   
+                    </View>
+                  </View>                                                        
+                </View>
 
-            </ImageBackground> 
-          </TouchableOpacity>
-        ))}
-      </View>
+              </ImageBackground> 
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
 
       {renderPopup()}
 
@@ -226,6 +231,7 @@ const SelectSproutScreen = ({ navigation }) => {
               screenName: 'ChooseWhatToGrow'
             },
           ]}
+          buttonStyle={{width: '75%'}}
         />
       </View>
     </SafeAreaView>
@@ -237,54 +243,47 @@ export default SelectSproutScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     backgroundColor: '#F5F5F5',   
     justifyContent: 'center',
   },
-  germinationImage: {
-    width: '100%',
-    height: '30%',
-    resizeMode: 'cover',
-  },
-  header: {
-    color: '#1C0F13',
-    fontSize: 24,
+  largeText: {
+    fontSize: 34,
     fontWeight: 'bold',
-    marginVertical: 10,
-    marginHorizontal: 20,
-  },
-  introText: {
-    color: '#1C0F13',
-    fontSize: 16,
     textAlign: 'center',
-    marginHorizontal: 20,
-    marginBottom: 20,
+    marginVertical: 40,
+    color: '#93C385',
+    marginHorizontal: 10,
+    lineHeight: 35,
+  },
+  scrollView: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   imageContainer: {    
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 5,
-    justifyContent: 'space-evenly',
+    marginVertical: 5,
+    justifyContent: 'space-between',
+    marginHorizontal: 30,
   },
   plantContainer: {
     width: '45%',
     alignItems: 'center',
   },
   plantImage: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     resizeMode: 'cover',
-    borderRadius: 10,
-    marginBottom: 20,
+    borderRadius: 15,
+    marginBottom: 40,
     overflow: 'hidden',
   },
   imageTitle: {
-    color: '#1C0F13',
-    fontSize: 16,
+    fontSize: 20,
     textAlign: 'center',
-    marginBottom: 5,
+    marginBottom: 15,
     fontWeight: 'bold',
+    marginVertical: 10,
   },
   popupText: {
     color: '#1C0F13',
@@ -293,47 +292,45 @@ const styles = StyleSheet.create({
   },
   popUpTextBackground: {
     backgroundColor: '#93C392',
-    borderRadius: 20,
+    borderRadius: 30,
     padding: 20,
+    width: '80%',
   },
   popupContainer: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 20,
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,    
   },
   imageText: {
     color: '#1C0F13',
-    fontSize: 10,
+    fontSize: 16,
     textAlign: 'right',
-    position: 'absolute',
-    right: 5,
     fontWeight: 'bold',
-    marginTop: 25,
+    marginHorizontal: 5,
   },
   infoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    left: 5,
-  },
-  
+    marginHorizontal: 5,    
+  },  
   overlay: {
-    backgroundColor: 'rgba(255,255,255,0.5)',
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    width: 150,
+    height: 150,
+    borderRadius: 10,    
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
+    marginBottom: 20,
+    paddingHorizontal: 20,
   },
   button: {
     backgroundColor: '#93C392',
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 20,
     marginVertical: 10,
     marginHorizontal: 10,
     width: '45%',

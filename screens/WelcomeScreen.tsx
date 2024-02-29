@@ -36,115 +36,106 @@ mutation CreateUser($name: String) {
 
 const WelcomeScreen = (navigation) => {
   
-    const { data, loading } = useQuery(USERSQUERY);
-  
-    const [createUser, {loading: mutationLoading, error: mutationError}] = useMutation(CREATE_USER_MUTATION);
-  
-    useEffect(() => {
-      if (data) {
-        // Log the list of user names to the console
-        const userNames = data.users.map((user: User) => user.name);
-        console.log('Loodud kasutajad:', userNames.join(', '));
-      }
-    }, [data]); // Run this effect whenever the data changes  
-  
-    const [name, setName] = React.useState('');
-    // const [email, setEmail] = React.useState('');
-    const [nameError, setNameError] = React.useState('');
-    // const [emailError, setEmailError] = React.useState('');
-  
-    if (loading) {
-      return <Text>Laadin andmeid</Text>
-    }  
-  
-    if (mutationLoading) {
-      return <Text>Loon kasutajat</Text>
+  const { data, loading } = useQuery(USERSQUERY);
+
+  const [createUser, {loading: mutationLoading, error: mutationError}] = useMutation(CREATE_USER_MUTATION);
+
+  useEffect(() => {
+    if (data) {
+      // Log the list of user names to the console
+      const userNames = data.users.map((user: User) => user.name);
+      console.log('Loodud kasutajad:', userNames.join(', '));
     }
-  
-    if (mutationError) {
-      return <Text>Kasutaja loomine ebaõnnestus</Text>
-    }  
-  
-    const handleCreateUserPress = async () => {  
-      let nameError = '';
-      // let emailError = '';
-  
-      nameError = validateName(name, data);
-      // emailError = validateEmail(email, data);
-  
-      if (nameError) {
-        setNameError(nameError);
-      // setEmailError(emailError);
-        return;
+  }, [data]); // Run this effect whenever the data changes  
+
+  const [name, setName] = React.useState('');
+  // const [email, setEmail] = React.useState('');
+  const [nameError, setNameError] = React.useState('');
+  // const [emailError, setEmailError] = React.useState('');
+
+  if (loading) {
+    return <Text>Laadin andmeid</Text>
+  }  
+
+  if (mutationLoading) {
+    return <Text>Loon kasutajat</Text>
+  }
+
+  if (mutationError) {
+    return <Text>Kasutaja loomine ebaõnnestus</Text>
+  }  
+
+  const handleCreateUserPress = async () => {  
+    let nameError = '';
+    // let emailError = '';
+
+    nameError = validateName(name, data);
+    // emailError = validateEmail(email, data);
+
+    if (nameError) {
+      setNameError(nameError);
+    // setEmailError(emailError);
+      return;
+    }
+    
+    setNameError('');
+    // setEmailError('');
+    
+    try {
+      const { data: mutationData } = await createUser({ 
+        variables: {
+          name, 
+        },
+      })
+
+      const userId = mutationData.createUser.id;
+      const userName = mutationData.createUser.name;
+
+      await SecureStore.setItemAsync('userId', userId.toString());
+      await SecureStore.setItemAsync('userName', userName.toString());
+
+      console.log('Kasutaja loodud', mutationData);
+
+      setName('');
+      // setEmail('');
+
+    } catch (error) {
+      console.log('Mutation Error:', error);
+
+      if (error.networkError && error.networkError.result) {
+        console.log('Network Errors:', error.networkError.result.errors);
       }
+    }
+
+    navigation.navigate('ChooseWhatToGrow');
+  };
+
+  return (
+    <SafeAreaView>
+      <View style={styles.flexContainer}>
+        <Image source={require('../assets/taim.png')} style={styles.splashImage}/>
+      </View> 
+      <View style={styles.flexContainer}>
+        <Text style={styles.largeText}>Saame tuttavaks!{'\n'}Mina olen TAIM.</Text>
+      </View>
       
-      setNameError('');
-      // setEmailError('');
+      <View style={styles.inputContainer}>
+        <View style={styles.inputRow}>
+          <TextInput style={styles.input} placeholder="Mis sinu nimi on?" value={name} onChangeText={(text) => setName(text)} />
+          {nameError && <Text style={styles.errorText}>{nameError}</Text>}
+        </View>        
+      </View>
       
-      try {
-        const { data: mutationData } = await createUser({ 
-          variables: {
-            name, 
-          },
-        })
-  
-        const userId = mutationData.createUser.id;
-        const userName = mutationData.createUser.name;
-  
-        await SecureStore.setItemAsync('userId', userId.toString());
-        await SecureStore.setItemAsync('userName', userName.toString());
-  
-        console.log('Kasutaja loodud', mutationData);
-  
-        setName('');
-        // setEmail('');
-  
-      } catch (error) {
-        console.log('Mutation Error:', error);
-  
-        if (error.networkError && error.networkError.result) {
-          console.log('Network Errors:', error.networkError.result.errors);
-        }
-      }
-  
-      navigation.navigate('ChooseWhatToGrow');
-    };
-  
-    return (
-      <SafeAreaView>
-        <View style={styles.flexContainer}>
-          <Image source={require('../assets/taim.png')} style={styles.splashImage}/>
-        </View> 
-        <View style={styles.flexContainer}>
-          <Text style={styles.largeText}>Saame tuttavaks!{'\n'}Mina olen TAIM.</Text>
-        </View>
-        
-        <View style={styles.inputContainer}>
-          <View style={styles.inputRow}>
-            <TextInput style={styles.input} placeholder="Mis sinu nimi on?" value={name} onChangeText={(text) => setName(text)} />
-            {nameError && <Text style={styles.errorText}>{nameError}</Text>}
-          </View>        
-        </View>
-        
-        <View style={styles.flexContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleCreateUserPress}>
-            <Text style={styles.buttonText}>Hakkan kasvatama!</Text>
-          </TouchableOpacity>
-        </View>  
-        <View style={styles.flexContainer}>
-          <NavigationButton
-              buttons={[
-                {
-                  label: 'Alusta nimeta',
-                  screenName: 'ChooseWhatToGrow', 
-                },
-              ]}
-          />
-        </View>          
-       
-      </SafeAreaView>
-      
-    ) 
+      <TouchableOpacity style={styles.button} onPress={handleCreateUserPress}>
+        <Text style={styles.buttonText}>Hakkan kasvatama!</Text>
+      </TouchableOpacity>
+    
+      <NavigationButton
+        buttons={[{ label: 'Alusta nimeta', screenName: 'ChooseWhatToGrow' }]}
+        buttonStyle={{width: '55%'}}
+      />      
+    </SafeAreaView>      
+  ) 
 }
 
 export default WelcomeScreen;
@@ -156,7 +147,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
     marginHorizontal: 10,
-    width: '45%',
+    width: '55%',
+    alignSelf: 'center',
   },
   buttonText: {
     color: '#1C0F13',
@@ -168,6 +160,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
+    backgroundColor: 'F5F5F5',
   },
   splashImage: {
     width: 200,
@@ -191,14 +184,14 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginVertical: 10,
+    marginVertical: 20,
   },
   inputRow: {
     width: '60%',
     height: 'auto',    
   },
   largeText: {
-    fontSize: 24,
+    fontSize: 34,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,

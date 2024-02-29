@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Pressable, Text, SafeAreaView } from 'react-native';
+import { StyleSheet, Pressable, Text, SafeAreaView, ViewStyle, TextStyle, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 interface ButtonConfig {
@@ -9,9 +9,12 @@ interface ButtonConfig {
 
 interface NavigationButtonProps {
   buttons: ButtonConfig[];
+  buttonStyle?: ViewStyle;
+  labelStyle?: TextStyle;
+  containerStyle?: ViewStyle;
 }
 
-const NavigationButton: React.FC<NavigationButtonProps> = ({ buttons }) => {
+const NavigationButton: React.FC<NavigationButtonProps> = ({ buttons, buttonStyle, labelStyle, containerStyle }) => {
   const navigation = useNavigation();
 
   const handlePress = (screenName: string) => {
@@ -20,13 +23,13 @@ const NavigationButton: React.FC<NavigationButtonProps> = ({ buttons }) => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={[styles.buttonContainer, containerStyle]}>
       {buttons.map(({ label, screenName }, index) => (
         <Pressable
           key={`${screenName}${index}`}
-          style={styles.button}
+          style={[styles.button, buttonStyle]}
           onPress={() => handlePress(screenName)}>
-          <Text style={styles.buttonLabel}>{label}</Text>
+          <Text style={[styles.buttonLabel, labelStyle]}>{label}</Text>
         </Pressable>
       ))}
     </SafeAreaView>
@@ -34,17 +37,9 @@ const NavigationButton: React.FC<NavigationButtonProps> = ({ buttons }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonContainer: {
-    flexDirection: 'row', // Arrange buttons horizontally
-    flexWrap: 'wrap', // Allow buttons to wrap to the next row if needed
-    justifyContent: 'center', // Center buttons horizontally
-    alignItems: 'center', // Center buttons vertically
-    width: '100%', // Occupy full width of the container
+  buttonContainer: {    
+    justifyContent: 'space-around',
+    width: '100%',
   },
   button: {
     backgroundColor: '#93C392',
@@ -52,8 +47,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     margin: 10, // Add some margin between buttons
     minWidth: 120, // Set minimum width for buttons
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignSelf: 'center',
   },
   buttonLabel: {
     color: '#1C0F13',
