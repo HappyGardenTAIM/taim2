@@ -9,8 +9,7 @@ const SPROUTScreen = ({ navigation }) => {
   };
 
   const navigateToIWantSprouts = () => {
-    // Navigate to IWantTastyScreen
-    navigation.navigate('SPROUTScreen');
+    navigation.navigate('SelectSproutScreen');
   };
 
   return (

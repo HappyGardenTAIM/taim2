@@ -10,11 +10,11 @@ const FLOWERScreen = ({ navigation }) => {
 
   const navigateToIWantPretty = () => {
     // Navigate to IWantTastyScreen
-    navigation.navigate('FOODScreen');
+    navigation.navigate('SelectFlowerScreen');
   };
 
   return (
-    <SafeAreaView >
+    <SafeAreaView style={styles.container}>
       {/* Picture or animation of something pretty */}
       {/* <Image source={require('./path-to-pretty-image.png')} style={styles.prettyImage} /> */}
 

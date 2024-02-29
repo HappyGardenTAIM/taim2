@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
+import * as SecureStore from 'expo-secure-store';
 
 const GET_JOURNEY_TYPES = gql`
   query GetJourneyTypes {
@@ -16,35 +18,67 @@ const journeyTypeDisplayText = {
 };
 
 const ChooseWhatToGrowScreen = () => {
+
   const navigation = useNavigation();
 
-  // Mock user data
-  const userData = {
-    name: 'Olen Taim',
-    image: require('../assets/taim.png'),
-  };
+  const [userName, setUserName] = useState('');
 
-  const navigateToJourney = (journeyType) => {
-    navigation.navigate(`${journeyType}Screen` as never); 
+  const fetchUserName = async () => {
+    try {
+      const storedUserName = await SecureStore.getItemAsync('userName');
+      console.log('Username:', storedUserName)
+      if (!storedUserName) {
+        console.error('User name not found in SecureStore.');
+        return '';
+      }
+      return storedUserName;
+    } catch (error) {
+      console.error('Error fetching user name:', error);
+      return '';
+    }
   };
+    
+  useEffect(() => {
+    fetchUserName().then((name) => setUserName(name));
+  }, []);
 
   const { loading, error, data } = useQuery(GET_JOURNEY_TYPES);
 
-  if (loading) return <Text>Laen andmeid...</Text>;
-  if (error) return <Text>Error: {error.message}</Text>;
+  // const checkAndNavigate = async () => {
+  //   const storedJourneyType = await AsyncStorage.getItem('selectedJourney');
+  //   if (storedJourneyType) {
+  //     navigation.navigate(`${storedJourneyType}Screen` as never);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   checkAndNavigate();
+  // }, []);
+
+  // if (loading) return <Text>Laen andmeid...</Text>;
+  // if (error) return <Text>Error: {error.message}</Text>;
 
   const journeyTypes = data?.journeyTypes;
+  
+  const navigateToJourney = (journeyType) => {
+    storeJourneyType(journeyType);
+    navigation.navigate(`${journeyType}Screen` as never);
+  };
 
-  const displayTextForSPROUT = journeyTypeDisplayText.SPROUT;
-  const displayTextForFOOD = journeyTypeDisplayText.FOOD;
-  const displayTextForFLOWER = journeyTypeDisplayText.FLOWER;
+  const storeJourneyType = async (journeyType) => {
+    try {
+      await AsyncStorage.setItem('selectedJourney', journeyType);
+    } catch (error) {
+      console.error('Error storing journey type:', error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       {/* User's image and data */}
       <View style={styles.userDataContainer}>
-        <Image source={userData.image} style={styles.userImage} />
-        <Text style={styles.userName}>{userData.name}</Text>
+        <Image source={require('../assets/taim.png')} style={styles.userImage} />
+        <Text style={styles.userName}>{userName ? `Tere, ${userName}!` : 'Tere!'}</Text>
       </View>
 
       {/* Text "Tahan kasvatada" */}
@@ -52,13 +86,13 @@ const ChooseWhatToGrowScreen = () => {
 
       {/* Buttons */}
       {journeyTypes && journeyTypes.map((journeyType) => (
-        <TouchableOpacity
-          key={journeyType}
-          style={styles.buttonContainer}
-          onPress={() => navigateToJourney(journeyType)}
-        >
-          <Text style={styles.buttonText}>{`${journeyTypeDisplayText[journeyType]}`}</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            key={journeyType}            
+            style={styles.buttonContainer}
+            onPress={() => navigateToJourney(journeyType)}
+          >
+            <Text style={styles.buttonText}>{`${journeyTypeDisplayText[journeyType]}`}</Text>
+          </TouchableOpacity>
       ))}
     </SafeAreaView>
   );
@@ -81,8 +115,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   userName: {
-    color: '#1C0F13',
-    fontSize: 18,
+    color: '#93C385',
+    fontSize: 28,
     fontWeight: 'bold',
   },
   growText: {
