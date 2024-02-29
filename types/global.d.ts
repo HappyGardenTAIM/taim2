@@ -4,6 +4,7 @@ declare type RootStackParamList = {
     FOODScreen: undefined;
     FLOWERScreen: undefined;
     SPROUTScreen: undefined;
+    UserHomeScreen: undefined;
 }
 
 enum rolesEnum {
