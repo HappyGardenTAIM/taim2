@@ -69,10 +69,6 @@ const UserList = (navigation) => {
     } catch (error) {
       console.error('Error checking stored user ID:', error);
     }
-      
-  const handleGetStartedPress = () => {
-    navigation.navigate('ChooseWhatToGrow');
-
   };
 
   const { data, loading } = useQuery(USERSQUERY);
@@ -104,14 +100,14 @@ const UserList = (navigation) => {
 
   const handleCreateUserPress = async () => {  
     let nameError = '';
-  //   let emailError = '';
+    // let emailError = '';
 
     nameError = validateName(name, data);
-  //   emailError = validateEmail(email, data);
+    // emailError = validateEmail(email, data);
 
     if (nameError) {
       setNameError(nameError);
-  //     setEmailError(emailError);
+    // setEmailError(emailError);
       return;
     }
     
@@ -121,8 +117,8 @@ const UserList = (navigation) => {
     try {
       const { data: mutationData } = await createUser({ 
         variables: {
-            name, 
-         },
+          name, 
+        },
       })
 
       const userId = mutationData.createUser.id;
@@ -139,8 +135,9 @@ const UserList = (navigation) => {
     } catch (error) {
       console.log('Mutation Error:', error);
 
-    if (error.networkError && error.networkError.result) {
-      console.log('Network Errors:', error.networkError.result.errors);
+      if (error.networkError && error.networkError.result) {
+        console.log('Network Errors:', error.networkError.result.errors);
+      }
     }
 
     navigation.navigate('ChooseWhatToGrow');
@@ -163,19 +160,14 @@ const UserList = (navigation) => {
       </View>
 
       <View style={styles.flexContainer}>
-      <View style={styles.userList}>
-        <Text>Loodud kasutajad:</Text>        
-        {data?.users?.map((user: User) => (
-          <Text key={user.id}>{user.name} </Text>
-        ))}
+        <View style={styles.userList}>
+          <Text>Loodud kasutajad:</Text>        
+          {data?.users?.map((user: User) => (
+            <Text key={user.id}>{user.name} </Text>
+          ))}
+        </View>
       </View>
-    </View>
-    <View style={styles.inputContainer}>
-      <View style={styles.inputRow}>
-        <TextInput style={styles.input} placeholder="Kasutajanimi" value={name} onChangeText={(text) => setName(text)} />
-        {nameError && <Text style={styles.errorText}>{nameError}</Text>}
-      </View>
-
+      
       <View style={styles.flexContainer}>
         <TouchableOpacity style={styles.button} onPress={handleCreateUserPress}>
           <Text style={styles.buttonText}>Hakkan kasvatama!</Text>
@@ -185,8 +177,7 @@ const UserList = (navigation) => {
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ChooseWhatToGrow')}>
           <Text style={styles.buttonText}>Alusta nimeta</Text>
         </TouchableOpacity>
-      </View> 
-         
+      </View>          
     </SafeAreaView>
   ) 
 }
