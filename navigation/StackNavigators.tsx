@@ -1,6 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
 import UserHomeScreen from '../screens/UserHomeScreen';
 import ChooseWhatToGrowScreen from '../screens/ChooseWhatToGrowScreen'; 
 import SPROUTScreen from '../screens/SproutScreen';
@@ -19,6 +20,7 @@ function StackNavigator() {
     <NavigationContainer>
       <Nav.Navigator>
         <Nav.Screen name="Main" component={HomeScreen} options={{ headerShown: true }} />
+        <Nav.Screen name="WelcomeScreen" component={WelcomeScreen} />
         <Nav.Screen name="UserHomeScreen" component={UserHomeScreen} />
         <Nav.Screen name="ChooseWhatToGrow" component={ChooseWhatToGrowScreen} />
         <Nav.Screen name="FLOWERScreen" component={FLOWERScreen} />

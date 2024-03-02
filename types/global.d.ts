@@ -9,6 +9,7 @@ declare type RootStackParamList = {
     SelectFlowerScreen: undefined;
     SproutJourneyScreen: undefined;
     UserHomeScreen: undefined;
+    WelcomeScreen: undefined;
 }
 
 enum rolesEnum {
