@@ -3,6 +3,7 @@ import { SafeAreaView, Text, TouchableOpacity, StyleSheet, View, Image, ImageBac
 import { gql, useQuery, useMutation } from '@apollo/client';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as SecureStore from 'expo-secure-store';
+import NavigationButton from '../components/NavigationButton';
 
 const GET_PLANT_INFO = gql`
   query GetPlantInfo($type: PlantType!) {
@@ -35,11 +36,6 @@ const CREATE_JOURNEY_MUTATION = gql`
 `;
 
 const SelectFlowerScreen = ({ navigation }) => {
-  
-  const navigateToIWantToGrow = () => {
-    // Navigate back to IWantToGrowScreen
-    navigation.navigate('ChooseWhatToGrow' as never);
-  };
 
   const [selectedPlant, setSelectedPlant] = useState(null);
 
@@ -223,9 +219,14 @@ const SelectFlowerScreen = ({ navigation }) => {
 
       {/* Buttons */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={navigateToIWantToGrow}>
-          <Text style={styles.buttonText}>Valin midagi muud</Text>
-        </TouchableOpacity>
+      <NavigationButton
+        buttons={[
+          {
+            label: 'Valin midagi muud',
+            screenName: 'ChooseWhatToGrow'
+          },
+        ]}
+      />
       </View>
     </SafeAreaView>
   );
@@ -297,7 +298,6 @@ const styles = StyleSheet.create({
   },
   popupContainer: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 20,
     padding: 20,
     flex: 1,
     justifyContent: 'center',
@@ -316,14 +316,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     left: 5,
-  },
-  
+  },  
   overlay: {
     backgroundColor: 'rgba(255,255,255,0.5)',
     width: 100,
     height: 100,
-    borderRadius: 10,
-    
+    borderRadius: 10,    
   },
   buttonContainer: {
     flexDirection: 'row',
