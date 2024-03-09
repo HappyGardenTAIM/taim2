@@ -168,7 +168,7 @@ const SelectSproutScreen = ({ navigation }) => {
       })
 
       console.log('Õpitee loodud', mutationData);
-      navigation.navigate('SproutJourneyScreen');
+      navigation.navigate('JourneyScreen');
     } catch (error) {
       console.log('Mutation Error:', error);
 

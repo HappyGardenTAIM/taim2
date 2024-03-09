@@ -42,14 +42,11 @@ const ChooseWhatToGrowScreen = () => {
   const fetchUserName = async () => {
     try {
       const storedUserName = await SecureStore.getItemAsync('userName');
-      console.log('Username:', storedUserName)
       if (!storedUserName) {
-        console.error('User name not found in SecureStore.');
         return '';
       }
       return storedUserName;
     } catch (error) {
-      console.error('Error fetching user name:', error);
       return '';
     }
   };
@@ -80,7 +77,6 @@ const ChooseWhatToGrowScreen = () => {
     try {
       await AsyncStorage.setItem('selectedJourney', journeyType);
     } catch (error) {
-      console.error('Error storing journey type:', error);
     }
   };
 

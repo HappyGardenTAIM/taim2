@@ -62,7 +62,6 @@ const SelectFlowerScreen = ({ navigation }) => {
   }
 
   const plantList = data.plantList;
-  console.log(plantList);
 
   const placeholder = require('../assets/taim.png');  
 
@@ -150,13 +149,11 @@ const SelectFlowerScreen = ({ navigation }) => {
       const storedUserId = await SecureStore.getItemAsync('userId');
     
       if (!storedUserId) {
-        console.error('User ID not found in SecureStore.');
         alert('Kasutaja ID puudub. Palun logi sisse.');
         return;
       }
 
       const userId = parseInt(storedUserId);
-      console.log('User ID:', userId);
       
       const { data: mutationData } = await createJourney({ 
         variables: {
@@ -165,13 +162,10 @@ const SelectFlowerScreen = ({ navigation }) => {
          },
       })
 
-      console.log('Õpitee loodud', mutationData);
-      navigation.navigate('SproutJourneyScreen');
+      navigation.navigate('JourneyScreen');
     } catch (error) {
-      console.log('Mutation Error:', error);
 
       if (error.networkError && error.networkError.result) {
-        console.log('Network Errors:', error.networkError.result.errors);
         alert('Õpitee loomine ebaõnnestus');
       } else {
         alert('Õpitee loomine ebaõnnestus');
