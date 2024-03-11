@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 
-const SproutJourneyScreen = () => {
+const JourneyScreen = () => {
   return (
       <View style={styles.container}>
           <Image source={require('../assets/taim.png')} style={styles.image} />
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SproutJourneyScreen;
+export default JourneyScreen;

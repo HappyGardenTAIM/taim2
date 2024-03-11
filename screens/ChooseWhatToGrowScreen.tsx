@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { SafeAreaView, View, Image, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { gql, useQuery } from '@apollo/client';
@@ -44,12 +44,12 @@ const ChooseWhatToGrowScreen = () => {
       const storedUserName = await SecureStore.getItemAsync('userName');
       console.log('Username:', storedUserName)
       if (!storedUserName) {
-        console.error('User name not found in SecureStore.');
+        console.log('User name not found in SecureStore.');
         return '';
       }
       return storedUserName;
     } catch (error) {
-      console.error('Error fetching user name:', error);
+      console.log('Error fetching user name:', error);
       return '';
     }
   };
@@ -80,29 +80,31 @@ const ChooseWhatToGrowScreen = () => {
     try {
       await AsyncStorage.setItem('selectedJourney', journeyType);
     } catch (error) {
-      console.error('Error storing journey type:', error);
+      console.log('Error storing journey type:', error);
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>      
-      <View >
-        <Image source={require('../assets/taim.png')} style={styles.splashImage} />
-        <Text style={styles.largeText}>{userName ? `Tere, ${userName}!` : 'Tere!'}</Text>
-      </View>
-
-      <Text style={styles.text}>Tahan kasvatada</Text>
-
-      {/* Buttons */}
-      {journeyTypes && journeyTypes.map((journeyType) => (
-        <TouchableOpacity
-          key={journeyType}            
-          style={styles.button}
-          onPress={() => navigateToJourney(journeyType)}
-        >
-          <Text style={styles.buttonText}>{`${journeyTypeDisplayText[journeyType]}`}</Text>
-        </TouchableOpacity>
-      ))}
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View style={styles.container}>
+          <Image source={require('../assets/taim.png')} style={styles.splashImage} />
+          <Text style={styles.largeText}>{userName ? `Tere, ${userName}!` : 'Tere!'}</Text>
+        
+          <Text style={styles.text}>Tahan kasvatada</Text>
+        
+          {/* Buttons */}
+          {journeyTypes && journeyTypes.map((journeyType) => (
+            <TouchableOpacity
+              key={journeyType}            
+              style={styles.button}
+              onPress={() => navigateToJourney(journeyType)}
+            >
+              <Text style={styles.buttonText}>{`${journeyTypeDisplayText[journeyType]}`}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>      
     </SafeAreaView>
   );
 };
@@ -112,6 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'F5F5F5',
     alignItems: 'center',
     justifyContent: 'center',
+    marginVertical: 20,
   },
   splashImage: {
     width: 200,
@@ -144,6 +147,7 @@ const styles = StyleSheet.create({
     color: '#1C0F13',
     fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 

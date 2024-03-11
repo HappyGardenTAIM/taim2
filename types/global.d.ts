@@ -7,7 +7,7 @@ declare type RootStackParamList = {
     SelectSproutScreen: undefined;
     SelectFoodScreen: undefined;
     SelectFlowerScreen: undefined;
-    SproutJourneyScreen: undefined;
+    JourneyScreen: undefined;
     UserHomeScreen: undefined;
     WelcomeScreen: undefined;
     Taim: undefined;

@@ -9,7 +9,7 @@ import FOODScreen from '../screens/FOODScreen';
 import SelectSproutScreen from '../screens/SelectSproutScreen';
 import SelectFoodScreen from '../screens/SelectFoodScreen';
 import SelectFlowerScreen from '../screens/SelectFlowerScreen';
-import SproutJourneyScreen from '../screens/SproutJourneyScreen';
+import JourneyScreen from '../screens/JourneyScreen';
 import { NavigationContainer } from '@react-navigation/native';
 
 const Nav = createNativeStackNavigator<RootStackParamList>();
@@ -27,7 +27,7 @@ function StackNavigator({initialRouteName}) {
         <Nav.Screen name="SelectSproutScreen" component={SelectSproutScreen} />
         <Nav.Screen name="SelectFoodScreen" component={SelectFoodScreen} />
         <Nav.Screen name="SelectFlowerScreen" component={SelectFlowerScreen} />
-        <Nav.Screen name="SproutJourneyScreen" component={SproutJourneyScreen} />
+        <Nav.Screen name="JourneyScreen" component={JourneyScreen} />
       </Nav.Navigator> 
     </NavigationContainer>
   );
