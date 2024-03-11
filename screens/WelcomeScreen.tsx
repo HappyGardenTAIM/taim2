@@ -1,9 +1,10 @@
-import { View, Text, TextInput, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, SafeAreaView, TouchableOpacity, Image, ScrollView } from 'react-native';
 import React, { useEffect } from 'react'
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { validateEmail, validateName } from '../helpers';
 import * as SecureStore from 'expo-secure-store';
 import NavigationButton from '../components/NavigationButton';
+import { useNavigation } from '@react-navigation/native';
 
 interface User {
   id: number;
@@ -34,7 +35,9 @@ mutation CreateUser($name: String) {
 }
 `
 
-const WelcomeScreen = (navigation) => {
+const WelcomeScreen = () => {
+
+  const navigation = useNavigation();
   
   const { data, loading } = useQuery(USERSQUERY);
 
@@ -107,33 +110,35 @@ const WelcomeScreen = (navigation) => {
       }
     }
 
-    navigation.navigate('ChooseWhatToGrow');
+    navigation.navigate('ChooseWhatToGrow' as never);
   };
 
   return (
     <SafeAreaView>
-      <View style={styles.flexContainer}>
-        <Image source={require('../assets/taim.png')} style={styles.splashImage}/>
-      </View> 
-      <View style={styles.flexContainer}>
-        <Text style={styles.largeText}>Saame tuttavaks!{'\n'}Mina olen TAIM.</Text>
-      </View>
+      <ScrollView>
+        <View style={styles.flexContainer}>
+          <Image source={require('../assets/taim.png')} style={styles.splashImage}/>
+        </View> 
+        <View style={styles.flexContainer}>
+          <Text style={styles.largeText}>Saame tuttavaks!{'\n'}Mina olen TAIM.</Text>
+        </View>
+        
+        <View style={styles.inputContainer}>
+          <View style={styles.inputRow}>
+            <TextInput style={styles.input} placeholder="Mis sinu nimi on?" value={name} onChangeText={(text) => setName(text)} />
+            {nameError && <Text style={styles.errorText}>{nameError}</Text>}
+          </View>        
+        </View>
+        
+        <TouchableOpacity style={styles.button} onPress={handleCreateUserPress}>
+          <Text style={styles.buttonText}>Hakkan kasvatama!</Text>
+        </TouchableOpacity>
       
-      <View style={styles.inputContainer}>
-        <View style={styles.inputRow}>
-          <TextInput style={styles.input} placeholder="Mis sinu nimi on?" value={name} onChangeText={(text) => setName(text)} />
-          {nameError && <Text style={styles.errorText}>{nameError}</Text>}
-        </View>        
-      </View>
-      
-      <TouchableOpacity style={styles.button} onPress={handleCreateUserPress}>
-        <Text style={styles.buttonText}>Hakkan kasvatama!</Text>
-      </TouchableOpacity>
-    
-      <NavigationButton
-        buttons={[{ label: 'Alusta nimeta', screenName: 'ChooseWhatToGrow' }]}
-        buttonStyle={{width: '55%'}}
-      />      
+        <NavigationButton
+          buttons={[{ label: 'Alusta nimeta', screenName: 'ChooseWhatToGrow' }]}
+          buttonStyle={{width: '55%'}}
+        />      
+      </ScrollView>
     </SafeAreaView>      
   ) 
 }

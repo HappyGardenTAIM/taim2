@@ -35,20 +35,25 @@
           "icon": "./assets/notification.png",
           "color": "#ffffff"
         }
-      ],      
+      ],
       [
         "expo-secure-store",
+        {}
+      ],
+      [
+        "expo-build-properties",
         {
-          
+          "android": {
+            "usesCleartextTraffic": true
+          }
         }
-      ]        
+      ]
     ],
     "extra": {
       "eas": {
         "projectId": "f22f0c8a-683e-464f-b9d1-ac63217956ad"
       }
     },
-    "owner": "taim2"   
-   
+    "owner": "taim2"
   }
 }

@@ -2,13 +2,13 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { AppRegistry } from 'react-native';
 import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, ApolloLink } from '@apollo/client';
-import StackNavigator from './navigation/StackNavigators';
-import {GRAPHQL_URL} from "@env";
+import {EXPO_PUBLIC_GRAPHQL_URL} from "@env";
+import Taim from './Taim';
 
-const httpLink = new HttpLink({ uri: GRAPHQL_URL });
+const httpLink = new HttpLink({ uri: EXPO_PUBLIC_GRAPHQL_URL });
 
 const logLink = new ApolloLink((operation, forward) => {
-  console.log(GRAPHQL_URL);
+  console.log(EXPO_PUBLIC_GRAPHQL_URL);
   console.log(`GraphQL Request: ${operation.operationName}`);
   return forward(operation).map(response => {
     console.log(`GraphQL Response: ${operation.operationName}`, response);
@@ -27,8 +27,8 @@ AppRegistry.registerComponent('TAIM', () => App);
 export default function App() {
   return (
     <ApolloProvider client={client}>
-      <StackNavigator/>
-    </ApolloProvider>    
+      <Taim />
+    </ApolloProvider>
   );
 }
 
