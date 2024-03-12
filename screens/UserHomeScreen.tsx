@@ -26,10 +26,11 @@ const UserHomeScreen = () => {
     fetchUserName().then((name) => setUserName(name));
   }, []);
 
-  const buttonConfigurations = [
-    { label: 'Minu taimed', screenName: 'FLOWERScreen' },
-    { label: 'Minu teekond', screenName: 'FOODScreen' },
-    { label: 'Minu seaded', screenName: 'SPROUTScreen' },
+  const buttonConfigurations = [    
+    { label: 'Minu teekond', screenName: 'JourneyScreen' },
+    { label: 'Uus teekond', screenName: 'ChooseWhatToGrow' },
+    // { label: 'Minu taimed', screenName: 'FLOWERScreen' },
+    { label: 'Minu seaded', screenName: 'UserHomeScreen' },
   ];
 
   return (

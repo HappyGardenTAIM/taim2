@@ -138,10 +138,10 @@ const WelcomeScreen = () => {
             <Text style={styles.buttonText}>Hakkan kasvatama!</Text>
           </TouchableOpacity>
         
-          <NavigationButton
-            buttons={[{ label: 'Alusta nimeta', screenName: 'ChooseWhatToGrow' }]}
-            buttonStyle={{width: '55%'}}
-          />      
+          {/* <NavigationButton
+             buttons={[{ label: 'Alusta nimeta', screenName: 'ChooseWhatToGrow' }]}
+             buttonStyle={{width: '55%'}}
+          > */}
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>      
