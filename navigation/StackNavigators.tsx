@@ -18,16 +18,16 @@ function StackNavigator({initialRouteName}) {
   return (
     <NavigationContainer>
       <Nav.Navigator initialRouteName={initialRouteName}>
-        <Nav.Screen name="WelcomeScreen" component={WelcomeScreen} />
-        <Nav.Screen name="UserHomeScreen" component={UserHomeScreen} />
-        <Nav.Screen name="ChooseWhatToGrow" component={ChooseWhatToGrowScreen} />
-        <Nav.Screen name="FLOWERScreen" component={FLOWERScreen} />
-        <Nav.Screen name="SPROUTScreen" component={SPROUTScreen} />
-        <Nav.Screen name="FOODScreen" component={FOODScreen} />
-        <Nav.Screen name="SelectSproutScreen" component={SelectSproutScreen} />
-        <Nav.Screen name="SelectFoodScreen" component={SelectFoodScreen} />
-        <Nav.Screen name="SelectFlowerScreen" component={SelectFlowerScreen} />
-        <Nav.Screen name="JourneyScreen" component={JourneyScreen} />
+        <Nav.Screen name="WelcomeScreen" component={WelcomeScreen} options={{title: 'Tere tulemast!'}}/>
+        <Nav.Screen name="UserHomeScreen" component={UserHomeScreen} options={{title: 'Kodu'}}/>
+        <Nav.Screen name="ChooseWhatToGrow" component={ChooseWhatToGrowScreen} options={{title: 'Õpitee valik'}}/>
+        <Nav.Screen name="FLOWERScreen" component={FLOWERScreen} options={{title: 'Kasvata lill'}}/>
+        <Nav.Screen name="SPROUTScreen" component={SPROUTScreen} options={{title: 'Idanda'}}/>
+        <Nav.Screen name="FOODScreen" component={FOODScreen} options={{title: 'Kasvata toitu'}}/>
+        <Nav.Screen name="SelectSproutScreen" component={SelectSproutScreen} options={{title: 'Vali taim'}}/>
+        <Nav.Screen name="SelectFoodScreen" component={SelectFoodScreen} options={{title: 'Vali taim'}}/>
+        <Nav.Screen name="SelectFlowerScreen" component={SelectFlowerScreen} options={{title: 'Vali taim'}}/>
+        <Nav.Screen name="JourneyScreen" component={JourneyScreen} options={{title: 'Õpitee'}}/>
       </Nav.Navigator> 
     </NavigationContainer>
   );
