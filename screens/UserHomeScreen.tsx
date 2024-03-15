@@ -28,7 +28,7 @@ const UserHomeScreen = () => {
 
   const buttonConfigurations = [    
     { label: 'Minu teekond', screenName: 'JourneyScreen' },
-    { label: 'Uus teekond', screenName: 'ChooseWhatToGrow' },
+    { label: 'Uus teekond', screenName: 'JourneySelection' },
     // { label: 'Minu taimed', screenName: 'FLOWERScreen' },
     { label: 'Minu seaded', screenName: 'UserHomeScreen' },
   ];

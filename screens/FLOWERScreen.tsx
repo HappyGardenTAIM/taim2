@@ -2,20 +2,23 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import HomeButton from '../components/HomeButton';
 
 const FLOWERScreen = () => {
 
   const buttonConfigurations = [
-    { label: 'Valin midagi muud', screenName: 'ChooseWhatToGrow' },
+    { label: 'Valin midagi muud', screenName: 'JourneySelection' },
     { label: 'Tahan lille', screenName: 'SelectFlowerScreen' },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
+      <HomeButton />
 
-      <MaterialCommunityIcons name="flower" size={100} color="black" marginTop={60} marginBottom={30}/>
+      
       
         <Text style={styles.largeText}>Kasvata</Text>
+        <MaterialCommunityIcons name="flower" size={100} color="black" marginTop={10} marginBottom={30}/>
         <Text style={styles.introText}>
           Kui seeme on mullas, on vaja vaid päikest, vett ja veidi kannatlikkust. Peagi saad tasuks imetleda kauneid õisi!
         </Text>

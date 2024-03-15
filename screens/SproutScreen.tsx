@@ -2,20 +2,22 @@ import React from 'react';
 import { SafeAreaView, Text, StyleSheet } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import HomeButton from '../components/HomeButton';
 
 const SPROUTScreen = () => {
 
   const buttonConfigurations = [
-    { label: 'Valin midagi muud', screenName: 'ChooseWhatToGrow' },
+    { label: 'Valin midagi muud', screenName: 'JourneySelection' },
     { label: 'Tahan idusid', screenName: 'SelectSproutScreen' },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      <MaterialCommunityIcons name="seed-outline" size={100} color="black" margin={30}/>
+      
+      <HomeButton />
       
       <Text style={styles.largeText}>Idanda</Text>
-    
+      <MaterialCommunityIcons name="seed-outline" size={100} color="black" margin={30}/>
       <Text style={styles.introText}>
       Lihtsaim ja kiireim viis kasvatada ise midagi värsket. Leota seemneid vees, loputa kaks korda päevas ja mõne päevaga ongi krõmpsud idud valmis!
       </Text>

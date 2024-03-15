@@ -4,6 +4,7 @@ import { gql, useQuery, useMutation } from '@apollo/client';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as SecureStore from 'expo-secure-store';
 import NavigationButton from '../components/NavigationButton';
+import HomeButton from '../components/HomeButton';
 
 const GET_PLANT_INFO = gql`
   query GetPlantInfo($type: PlantType!) {
@@ -183,10 +184,9 @@ const SelectFlowerScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-
-      <Text style={styles.largeText}>Vali oma taim</Text>
-      
       <ScrollView contentContainerStyle={styles.scrollView}>
+        <HomeButton size={200}/>
+        <Text style={styles.largeText}>Vali oma taim</Text>
         <View style={styles.imageContainer}>
           {plantList.map((plant, index) => (
             <TouchableOpacity
@@ -226,7 +226,7 @@ const SelectFlowerScreen = ({ navigation }) => {
         buttons={[
           {
             label: 'Valin midagi muud',
-            screenName: 'ChooseWhatToGrow'
+            screenName: 'JourneySelection'
           },
         ]}
         buttonStyle={{width: '75%'}}
@@ -243,6 +243,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F5F5',   
     justifyContent: 'center',
+        
   },
   largeText: {
     fontSize: 34,

@@ -37,8 +37,8 @@ const Taim = () => {
                         console.log('Setting initial screen to UserHomeScreen');
                         setInitialScreen('UserHomeScreen');
                     } else {
-                        console.log('Setting initial screen to ChooseWhatToGrowScreen');
-                        setInitialScreen('ChooseWhatToGrow');
+                        console.log('Setting initial screen to JourneySelectionScreen');
+                        setInitialScreen('JourneySelection');
                     }
                 } else {
                     console.log('Setting initial screen to WelcomeScreen');

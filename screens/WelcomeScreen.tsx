@@ -110,7 +110,7 @@ const WelcomeScreen = () => {
       }
     }
 
-    navigation.navigate('ChooseWhatToGrow' as never);
+    navigation.navigate('JourneySelection' as never);
   };
 
   return (
@@ -139,7 +139,7 @@ const WelcomeScreen = () => {
           </TouchableOpacity>
         
           {/* <NavigationButton
-             buttons={[{ label: 'Alusta nimeta', screenName: 'ChooseWhatToGrow' }]}
+             buttons={[{ label: 'Alusta nimeta', screenName: 'JourneySelection' }]}
              buttonStyle={{width: '55%'}}
           > */}
         </ScrollView>

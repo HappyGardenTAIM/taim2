@@ -3,19 +3,23 @@ import { SafeAreaView, Text, StyleSheet, View } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSeedling } from '@fortawesome/free-solid-svg-icons';
+import HomeButton from '../components/HomeButton';
 
 const FOODScreen = () => {
 
   const buttonConfigurations = [
-    { label: 'Valin midagi muud', screenName: 'ChooseWhatToGrow' },
+    { label: 'Valin midagi muud', screenName: 'JourneySelection' },
     { label: 'Tahan taime', screenName: 'SelectFoodScreen' },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
-      <FontAwesomeIcon icon={faSeedling} size={100} style={styles.icon} />
+
+      <HomeButton />
+      
       
         <Text style={styles.largeText}>Kasvata</Text>
+        <FontAwesomeIcon icon={faSeedling} size={100} style={styles.icon} />
         <Text style={styles.introText}>
           Pane seeme mulda, anna talle päikesevalgust ja vett ning õige pea saad suhu pista midagi maitsvat!
         </Text>
@@ -39,7 +43,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   icon: {
-    marginTop: 60,
+    marginTop: 30,
     marginBottom: 30,
   },
   largeText: {

@@ -2,7 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import UserHomeScreen from '../screens/UserHomeScreen';
-import ChooseWhatToGrowScreen from '../screens/ChooseWhatToGrowScreen'; 
+import JourneySelectionScreen from '../screens/JourneySelectionScreen'; 
 import SPROUTScreen from '../screens/SproutScreen';
 import FLOWERScreen from '../screens/FLOWERScreen';
 import FOODScreen from '../screens/FOODScreen';
@@ -20,7 +20,7 @@ function StackNavigator({initialRouteName}) {
       <Nav.Navigator initialRouteName={initialRouteName}>
         <Nav.Screen name="WelcomeScreen" component={WelcomeScreen} options={{title: 'Tere tulemast!'}}/>
         <Nav.Screen name="UserHomeScreen" component={UserHomeScreen} options={{title: 'Kodu'}}/>
-        <Nav.Screen name="ChooseWhatToGrow" component={ChooseWhatToGrowScreen} options={{title: 'Õpitee valik'}}/>
+        <Nav.Screen name="JourneySelection" component={JourneySelectionScreen} options={{title: 'Õpitee valik'}}/>
         <Nav.Screen name="FLOWERScreen" component={FLOWERScreen} options={{title: 'Kasvata lill'}}/>
         <Nav.Screen name="SPROUTScreen" component={SPROUTScreen} options={{title: 'Idanda'}}/>
         <Nav.Screen name="FOODScreen" component={FOODScreen} options={{title: 'Kasvata toitu'}}/>

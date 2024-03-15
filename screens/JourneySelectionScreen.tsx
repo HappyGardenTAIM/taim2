@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { gql, useQuery } from '@apollo/client';
 import * as SecureStore from 'expo-secure-store';
+import HomeButton from '../components/HomeButton';
 
 const GET_JOURNEY_TYPES = gql`
   query GetJourneyTypes {
@@ -17,7 +18,7 @@ const journeyTypeDisplayText = {
   FLOWER: 'Midagi ilusat',
 };
 
-const ChooseWhatToGrowScreen = () => {
+const JourneySelectionScreen = () => {
 
   // Check if user has already selected a journey type and navigate to that screen
   
@@ -86,9 +87,10 @@ const ChooseWhatToGrowScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.container}>
-          <Image source={require('../assets/taim.png')} style={styles.splashImage} />
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <View >
+          <HomeButton size={200}/>
+        </View>
           <Text style={styles.largeText}>{userName ? `Tere, ${userName}!` : 'Tere!'}</Text>
         
           <Text style={styles.text}>Tahan kasvatada</Text>
@@ -103,7 +105,7 @@ const ChooseWhatToGrowScreen = () => {
               <Text style={styles.buttonText}>{`${journeyTypeDisplayText[journeyType]}`}</Text>
             </TouchableOpacity>
           ))}
-        </View>
+        
       </ScrollView>      
     </SafeAreaView>
   );
@@ -115,6 +117,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 20,
+  },
+  scrollView: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   splashImage: {
     width: 200,
@@ -151,4 +157,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChooseWhatToGrowScreen;
+export default JourneySelectionScreen;
