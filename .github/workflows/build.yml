@@ -1,0 +1,79 @@
+name: Expo EAS Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install Expo CLI
+        run: npm install -g eas-cli
+
+      - name: Debug Environment Variables
+        run: |
+          echo "EXPO_CLI_USERNAME: $EXPO_CLI_USERNAME"
+          echo "EXPO_CLI_PASSWORD: $EXPO_CLI_PASSWORD"
+        env:
+          EXPO_CLI_USERNAME: ${{ secrets.EXPO_USERNAME }}
+          EXPO_CLI_PASSWORD: ${{ secrets.EXPO_PASSWORD }}
+
+      - name: Log in to Expo
+        run: npx expo login --non-interactive -u "${{ secrets.EXPO_USERNAME }}" -p "${{ secrets.EXPO_PASSWORD }}"
+               
+      - name: Build Android app
+        run: eas build --platform android --release-channel main
+
+      - name: Get APK URL
+        run: echo "::set-output name=apk_url::$(expo eas build:list --platform android --json | jq -r '.[0].artifactUrl')"
+
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: android-app
+          path: ${{ env.APK_PATH }}
+
+  notify:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download APK artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: android-app
+          path: artifacts
+
+      - name: Publish APK link
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const artifactPath = 'artifacts/android-app';
+            const apkFiles = fs.readdirSync(artifactPath).filter(file => file.endsWith('.apk'));
+            if (apkFiles.length > 0) {
+              const apkUrl = fs.readFileSync(`${artifactPath}/${apkFiles[0]}`, 'utf8');
+              console.log(`Latest APK URL: ${apkUrl}`);
+              const markdown = `Latest APK: [Download](${apkUrl})`;
+              const body = {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: markdown
+              };
+              await github.issues.createComment(body);
+            } else {
+              console.log('No APK file found');
+            }
