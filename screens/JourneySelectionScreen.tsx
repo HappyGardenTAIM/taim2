@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { gql, useQuery } from '@apollo/client';
 import * as SecureStore from 'expo-secure-store';
 import HomeButton from '../components/HomeButton';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const GET_JOURNEY_TYPES = gql`
   query GetJourneyTypes {
@@ -20,21 +21,7 @@ const journeyTypeDisplayText = {
 
 const JourneySelectionScreen = () => {
 
-  // Check if user has already selected a journey type and navigate to that screen
-  
-  // const checkAndNavigate = async () => {
-  //   const storedJourneyType = await AsyncStorage.getItem('selectedJourney');
-  //   if (storedJourneyType) {
-  //     navigation.navigate(`${storedJourneyType}Screen` as never);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   checkAndNavigate();
-  // }, []);
-
-
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   // Fetch user name from SecureStore for displaying a greeting
 
@@ -72,9 +59,9 @@ const JourneySelectionScreen = () => {
 
   // Store the selected journey type and navigate to the selected journey type screen
   
-  const navigateToJourney = (journeyType) => {
+  const navigateToJourney = (journeyType: string) => {
     storeJourneyType(journeyType);
-    navigation.navigate(`${journeyType}Screen` as never);
+    navigation.navigate('JourneyInfoScreen', { journeyType });
   };
 
   const storeJourneyType = async (journeyType) => {

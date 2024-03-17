@@ -1,40 +1,22 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import NavigationButton from '../components/NavigationButton';
+import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import HomeButton from '../components/HomeButton';
 
-const FLOWERScreen = () => {
-
-  const buttonConfigurations = [
-    { label: 'Valin midagi muud', screenName: 'JourneySelection' },
-    { label: 'Tahan lille', screenName: 'SelectFlowerScreen' },
-  ];
+const FLOWERContent = () => {
 
   return (
-    <SafeAreaView style={styles.container}>
-      <HomeButton />
-
-      
-      
+    
+    <View style={styles.container}>      
         <Text style={styles.largeText}>Kasvata</Text>
         <MaterialCommunityIcons name="flower" size={100} color="black" marginTop={10} marginBottom={30}/>
         <Text style={styles.introText}>
           Kui seeme on mullas, on vaja vaid päikest, vett ja veidi kannatlikkust. Peagi saad tasuks imetleda kauneid õisi!
-        </Text>
-      
-      {/* Buttons */}
-      
-      <NavigationButton buttons={buttonConfigurations} 
-      buttonStyle={styles.button}
-      containerStyle={{flexDirection: 'row'}}
-      />
-      
-    </SafeAreaView>
+        </Text>      
+    </View>
   );
 };
 
-export default FLOWERScreen;
+export default FLOWERContent;
 
 const styles = StyleSheet.create({
   container: { 
@@ -57,13 +39,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginHorizontal: 20,
     marginBottom: 20,
-  },
-  button: {
-    backgroundColor: '#93C392',
-    padding: 15,
-    borderRadius: 10,
-    marginVertical: 10,
-    marginHorizontal: 10,
-    width: '45%',
   },
 });

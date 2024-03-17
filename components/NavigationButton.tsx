@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 interface ButtonConfig {
   label: string;
   screenName: string;
+  params?: object;
 }
 
 interface NavigationButtonProps {
@@ -15,20 +16,21 @@ interface NavigationButtonProps {
 }
 
 const NavigationButton: React.FC<NavigationButtonProps> = ({ buttons, buttonStyle, labelStyle, containerStyle }) => {
+  
   const navigation = useNavigation();
 
-  const handlePress = (screenName: string) => {
-    console.log('Navigating to', screenName);
-    navigation.navigate({name: screenName} as never);
+  const handlePress = (screenName: string, params?: object) => {
+    console.log('Navigating to', screenName, 'with params:', params);
+    navigation.navigate({name: screenName, params} as never);
   };
 
   return (
     <SafeAreaView style={[styles.buttonContainer, containerStyle]}>
-      {buttons.map(({ label, screenName }, index) => (
+      {buttons.map(({ label, screenName, params }, index) => (
         <Pressable
           key={`${screenName}${index}`}
           style={[styles.button, buttonStyle]}
-          onPress={() => handlePress(screenName)}>
+          onPress={() => handlePress(screenName, params)}>
           <Text style={[styles.buttonLabel, labelStyle]}>{label}</Text>
         </Pressable>
       ))}

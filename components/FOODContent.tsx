@@ -1,40 +1,22 @@
 import React from 'react';
-import { SafeAreaView, Text, StyleSheet, View } from 'react-native';
-import NavigationButton from '../components/NavigationButton';
+import { Text, StyleSheet, View } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSeedling } from '@fortawesome/free-solid-svg-icons';
-import HomeButton from '../components/HomeButton';
 
-const FOODScreen = () => {
-
-  const buttonConfigurations = [
-    { label: 'Valin midagi muud', screenName: 'JourneySelection' },
-    { label: 'Tahan taime', screenName: 'SelectFoodScreen' },
-  ];
+const FOODContent = () => {
 
   return (
-    <SafeAreaView style={styles.container}>
-
-      <HomeButton />
-      
-      
+    <View style={styles.container}>
         <Text style={styles.largeText}>Kasvata</Text>
         <FontAwesomeIcon icon={faSeedling} size={100} style={styles.icon} />
         <Text style={styles.introText}>
           Pane seeme mulda, anna talle päikesevalgust ja vett ning õige pea saad suhu pista midagi maitsvat!
-        </Text>
-      
-      {/* Buttons */}
-      
-      <NavigationButton buttons={buttonConfigurations}
-      buttonStyle={styles.button}
-      containerStyle={{flexDirection: 'row'}}/>
-     
-    </SafeAreaView>
+        </Text>     
+    </View>
   );
 };
 
-export default FOODScreen;
+export default FOODContent;
 
 const styles = StyleSheet.create({
   container: { 
@@ -61,13 +43,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginHorizontal: 20,
     marginBottom: 20,
-  },
-  button: {
-    backgroundColor: '#93C392',
-    padding: 15,
-    borderRadius: 10,
-    marginVertical: 10,
-    marginHorizontal: 10,
-    width: '45%',
   },
 });

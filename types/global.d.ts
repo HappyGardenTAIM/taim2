@@ -1,16 +1,12 @@
 declare type RootStackParamList = {
     Main: undefined;
-    JourneySelection: undefined;
-    FOODScreen: undefined;
-    FLOWERScreen: undefined;
-    SPROUTScreen: undefined;
-    SelectSproutScreen: undefined;
-    SelectFoodScreen: undefined;
-    SelectFlowerScreen: undefined;
+    JourneySelection: {journeyType: string} | undefined;
     JourneyScreen: undefined;
     UserHomeScreen: undefined;
     WelcomeScreen: undefined;
     Taim: undefined;
+    JourneyInfoScreen: {journeyType: string} | undefined;
+    PlantSelectionScreen: {journeyType: string} | undefined;
 }
 
 enum rolesEnum {
@@ -34,3 +30,4 @@ enum tasksEnum {
     HARVEST = 5,
     CHECK = 6
   }
+  
