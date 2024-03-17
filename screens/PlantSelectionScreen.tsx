@@ -4,23 +4,9 @@ import { gql, useQuery, useMutation } from '@apollo/client';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as SecureStore from 'expo-secure-store';
 import NavigationButton from '../components/NavigationButton';
+import HomeButton from '../components/HomeButton';
 
-const GET_PLANT_INFO = gql`
-  query GetPlantInfo($type: PlantType!) {
-    plantList(type: $type) {
-      id
-      name
-      image
-      difficulty
-      minGrowthTime
-      maxGrowthTime
-      flower {
-        usage
-        appearance
-      }
-    }
-  }
-`;
+
 
 const CREATE_JOURNEY_MUTATION = gql`
   mutation CreateJourney($userId: Int!, $plantId: Int!) {
@@ -35,12 +21,32 @@ const CREATE_JOURNEY_MUTATION = gql`
   }
 `;
 
-const SelectFlowerScreen = ({ navigation }) => {
+const PlantSelectionScreen = ({ navigation, route }) => {
+
+  const { journeyType } = route.params;
+
+  const GET_PLANT_INFO = gql`
+  query GetPlantInfo($type: PlantType!) {
+    plantList(type: $type) {
+      id
+      name
+      image
+      difficulty
+      minGrowthTime
+      maxGrowthTime
+      ${journeyType === 'SPROUT' ? 'sprout { usage, benefits }' : ''}
+      ${journeyType === 'FOOD' ? 'food { usage, benefits }' : ''}
+      ${journeyType === 'FLOWER' ? 'flower { usage, appearance }' : ''}
+    }
+  }
+`;
+
+  
 
   const [selectedPlant, setSelectedPlant] = useState(null);
 
   const { loading, error, data } = useQuery(GET_PLANT_INFO, {
-    variables: { type: 'FLOWER' },
+    variables: { type: journeyType },
   });
 
   const [createJourney, {loading: mutationLoading, error: mutationError}] = useMutation(CREATE_JOURNEY_MUTATION);
@@ -60,6 +66,8 @@ const SelectFlowerScreen = ({ navigation }) => {
   if (mutationError) {
     return <Text>Õpitee loomine ebaõnnestus</Text>
   }
+  
+
 
   const plantList = data.plantList;
   console.log(plantList);
@@ -126,13 +134,26 @@ const SelectFlowerScreen = ({ navigation }) => {
           
             <Text style={styles.imageTitle}>{selectedPlant.name}</Text>
             <Text style={styles.popupText}>{difficultyDisplayText(selectedPlant.difficulty)}</Text>
-            <Text style={styles.popupText}>Valmis {selectedPlant.minGrowthTime} - {selectedPlant.maxGrowthTime} päevaga.</Text>
-            {selectedPlant.flower.appearance && (
+            <Text style={styles.popupText}>Valmis {selectedPlant.minGrowthTime}-{selectedPlant.maxGrowthTime} päevaga.</Text>
+            {selectedPlant.sprout && selectedPlant.sprout.benefits && (
+              <Text style={styles.popupText}>{selectedPlant.sprout.benefits}</Text>
+            )}
+            {selectedPlant.sprout && selectedPlant.sprout.usage && (
+              <Text style={styles.popupText}>{selectedPlant.sprout.usage}</Text>
+            )}
+            {selectedPlant.food && selectedPlant.food.benefits && (
+              <Text style={styles.popupText}>{selectedPlant.food.benefits}</Text>
+            )}
+            {selectedPlant.food && selectedPlant.food.usage && (
+              <Text style={styles.popupText}>{selectedPlant.food.usage}</Text>
+            )}
+            {selectedPlant.flower && selectedPlant.flower.appearance && (
               <Text style={styles.popupText}>{selectedPlant.flower.appearance}</Text>
             )}
-            {selectedPlant.flower.usage && (
+            {selectedPlant.flower && selectedPlant.flower.usage && (
               <Text style={styles.popupText}>{selectedPlant.flower.usage}</Text>
-            )}            
+            )}
+
           </View>
           <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.button} onPress={handleCreateJourneyPress}>
@@ -184,9 +205,11 @@ const SelectFlowerScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
 
-      <Text style={styles.largeText}>Vali oma taim</Text>
-      
       <ScrollView contentContainerStyle={styles.scrollView}>
+        <HomeButton size={200}/>
+        
+        <Text style={styles.largeText}>Vali oma taim</Text>
+        
         <View style={styles.imageContainer}>
           {plantList.map((plant, index) => (
             <TouchableOpacity
@@ -211,8 +234,8 @@ const SelectFlowerScreen = ({ navigation }) => {
                     </View>
                   </View>                                                        
                 </View>
-              </ImageBackground> 
 
+              </ImageBackground> 
             </TouchableOpacity>
           ))}
         </View>
@@ -222,21 +245,21 @@ const SelectFlowerScreen = ({ navigation }) => {
 
       {/* Buttons */}
       <View style={styles.buttonContainer}>
-      <NavigationButton
-        buttons={[
-          {
-            label: 'Valin midagi muud',
-            screenName: 'ChooseWhatToGrow'
-          },
-        ]}
-        buttonStyle={{width: '75%'}}
-      />
+        <NavigationButton
+          buttons={[
+            {
+              label: 'Valin midagi muud',
+              screenName: 'JourneySelection'
+            },
+          ]}
+          buttonStyle={{width: '75%'}}
+        />
       </View>
     </SafeAreaView>
   );
 };
 
-export default SelectFlowerScreen;
+export default PlantSelectionScreen;
 
 const styles = StyleSheet.create({
   container: {

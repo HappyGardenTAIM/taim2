@@ -34,3 +34,29 @@ const validateEmail = (email: string, data: { users: User[]; }) => {
 }
 
 export { validateName, validateEmail };
+
+export const getTitleForJourneyInfoScreen = (journeyType) => {
+    switch (journeyType) {
+      case 'SPROUT':
+        return 'Idanda';
+      case 'FOOD':
+        return 'Kasvata toitu';
+      case 'FLOWER':
+        return 'Kasvata lill';
+      default:
+        return 'Kasvata';
+    }
+};
+
+export const getButtonLabelForJourneyInfoScreen = (journeyType) => {
+    switch (journeyType) {
+      case 'SPROUT':
+        return 'Tahan idusid'
+      case 'FOOD':
+        return 'Tahan taime'
+      case 'FLOWER':
+        return 'Tahan lille'
+      default:
+        return 'Tahan taime'
+    }
+}

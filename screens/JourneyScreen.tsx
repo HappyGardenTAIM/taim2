@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
+import HomeButton from '../components/HomeButton';
 
 const JourneyScreen = () => {
   return (
       <View style={styles.container}>
-          <Image source={require('../assets/taim.png')} style={styles.image} />
+          <HomeButton/>
       </View>
   );
 };
