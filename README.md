@@ -69,6 +69,10 @@ After the Metro Bundler has started, type
 to open app in the emulator or on the physical phone.
 Type ```r``` to refresh as needed.
 
+## Latest Release
+Download the latest version of the app APK:
+
+[Download APK](https://expo.dev/artifacts/eas/crdcQ9mW7EXZCb1n6TDywR.apk)
 
 ## License
 
