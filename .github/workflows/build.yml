@@ -19,16 +19,18 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 16.x
       
-      - name: Install Expo CLI
+      - name: Install EAS CLI
         run: npm install -g eas-cli@latest
   
       - name: Authenticate with Expo
-        run: npx expo login --non-interactive --token ${{ secrets.EXPO_TOKEN }}
-
+        run: |
+          echo "EXPO_TOKEN=${{ secrets.EXPO_TOKEN }}" >> $GITHUB_ENV
+          npx expo login --non-interactive
+  
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build on EAS
         run: eas build --platform android --non-interactive --no-wait
@@ -36,6 +38,7 @@ jobs:
       - name: Get APK URL
         id: get-apk-url
         run: echo "::set-output name=apk_url::$(find . -name '*.apk' -type f -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f 2-)"
+
       - name: Upload APK as artifact
         uses: actions/upload-artifact@v3
         with:
