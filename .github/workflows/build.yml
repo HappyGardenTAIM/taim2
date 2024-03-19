@@ -14,33 +14,34 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
           node-version: 16.x
       
       - name: Install EAS CLI
         run: npm install -g eas-cli@latest
   
+      - name: Set Expo Token
+        run: echo "EXPO_TOKEN=${{ secrets.EXPO_TOKEN }}" >> $GITHUB_ENV
+
       - name: Authenticate with Expo
-        run: |
-          echo "EXPO_TOKEN=${{ secrets.EXPO_TOKEN }}" >> $GITHUB_ENV
-          npx expo login --non-interactive
+        run: npx expo login --non-interactive
   
       - name: Install dependencies
         run: npm ci
 
       - name: Build on EAS
-        run: eas build --platform android --non-interactive --no-wait
+        run: CI=1 eas build --platform android --no-wait
       
       - name: Get APK URL
         id: get-apk-url
         run: echo "::set-output name=apk_url::$(find . -name '*.apk' -type f -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f 2-)"
 
       - name: Upload APK as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: android-app
           path: ${{ steps.get-apk-url.outputs.apk_url }}
