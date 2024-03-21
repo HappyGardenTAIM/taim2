@@ -2,8 +2,8 @@ name: EAS Build
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - '*'
   release:
     types: [published]
 
@@ -25,25 +25,46 @@ jobs:
         run: npm install -g eas-cli@latest
 
       - name: Set Expo Token
-        run: echo "EXPO_TOKEN=JTdrW*****************" >> $GITHUB_ENV
+        run: echo "EXPO_TOKEN=HW201*****************" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: npm install
 
+      - name: Extract tag name
+        id: extract-tag
+        run: echo "::set-output name=tag_name::${GITHUB_REF#refs/tags/}"
+
+      - name: Check if tag is a new version
+        id: check-version
+        run: |
+          if [[ "${{ steps.extract-tag.outputs.tag_name }}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Tag is a new version"
+            exit 0
+          else
+            echo "Tag is not a new version, skipping workflow"
+            exit 1
+          fi
+        continue-on-error: true
+      
       - name: Build on EAS
-        run: CI=1 eas build --platform android --no-wait
+        if: steps.check-version.outputs.result == 'success'
+        run: npx eas-cli build --platform android --non-interactive --no-wait
       
       - name: Get APK URL
+        if: steps.check-version.outputs.result == 'success'
         id: get-apk-url
         run: echo "::set-output name=apk_url::$(find . -name '*.apk' -type f -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f 2-)"
-
+        
+      # Run the following steps only in GitHub Actions environment
       - name: Upload APK as artifact
+        if: steps.check-version.outputs.result == 'success' && github.event_name == 'push'  # Only run this step on push events
         uses: actions/upload-artifact@v3
         with:
           name: android-app
           path: ${{ steps.get-apk-url.outputs.apk_url }}
 
       - name: Update README with APK link
+        if: steps.check-version.outputs.result == 'success' && github.event_name == 'push'  # Only run this step on push events
         run: |
           latest_apk_url=$(echo "${{ steps.get-apk-url.outputs.apk_url }}")
           echo "Latest APK: [Download]($latest_apk_url)" > README.md
