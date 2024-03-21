@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image, StyleSheet, Text } from 'react-native';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import * as SecureStore from 'expo-secure-store';
@@ -24,20 +24,32 @@ query GetUserJourneys($userId: Int!) {
   }
 `;
 
-const JourneyScreen = async () => {
-    const id = await SecureStore.getItemAsync('userId');
-    const { loading, error, data } = useQuery(GET_USER_JOURNEYS, {
-        variables: { userId: id  },
-      });
-      if (loading) {
-        return <Text>Laadin...</Text>;
-      }
-      
-      if (error) {
-        return <Text>Tekkis viga: {error.message}</Text>;
-      }
+const JourneyScreen = () => {
 
-      if(data) {console.log(data)}
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const getUserId = async () => {
+      const id = await SecureStore.getItemAsync('userId');
+      console.log('userId:', id);
+      setUserId(parseInt(id));
+    };
+    getUserId();
+  }, []);
+
+  const { loading, error, data } = useQuery(GET_USER_JOURNEYS, {
+      variables: { userId },
+    });
+
+  if (loading) {
+    return <Text>Laadin...</Text>;
+  }
+  
+  if (error) {
+    return <Text>Tekkis viga: {error.message}</Text>;
+  }
+
+  if(data) {console.log(data)}
 
   return (
     
