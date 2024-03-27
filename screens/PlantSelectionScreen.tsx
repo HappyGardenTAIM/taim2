@@ -11,6 +11,7 @@ import HomeButton from '../components/HomeButton';
 const CREATE_JOURNEY_MUTATION = gql`
   mutation CreateJourney($userId: Int!, $plantId: Int!) {
     createJourney(data: {userId: $userId, plantId: $plantId}) {
+      id
       user {
         name
       }
@@ -187,7 +188,7 @@ const PlantSelectionScreen = ({ navigation, route }) => {
       })
 
       console.log('Õpitee loodud', mutationData);
-      navigation.navigate('JourneyScreen');
+      navigation.navigate('JourneyScreen', { journeyId: mutationData.createJourney.id });
     } catch (error) {
       console.log('Mutation Error:', error);
 

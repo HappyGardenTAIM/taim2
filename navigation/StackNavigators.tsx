@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { getTitleForJourneyInfoScreen } from '../helpers';
 import JourneyInfoScreen from '../screens/JourneyInfoScreen';
 import PlantSelectionScreen from '../screens/PlantSelectionScreen';
+import JourneyPrepScreen from '../screens/JourneyPrepScreen';
 
 const Nav = createNativeStackNavigator<RootStackParamList>();
 
@@ -19,19 +20,9 @@ function StackNavigator({initialRouteName}) {
         <Nav.Screen name="UserHomeScreen" component={UserHomeScreen} options={{title: 'Kodu'}}/>  
         <Nav.Screen name="PlantSelectionScreen" component={PlantSelectionScreen} options={{title: 'Vali taim'}}/>
         <Nav.Screen name="JourneyScreen" component={JourneyScreen} options={{title: 'Õpitee'}}/>
-        <Nav.Screen 
-          name="JourneySelection" 
-          component={JourneySelectionScreen} 
-          options={{
-            title: 'Õpitee valik'
-          }}/>
-        <Nav.Screen 
-          name="JourneyInfoScreen" 
-          component={JourneyInfoScreen} 
-          options={({ route }) => ({
-            title: getTitleForJourneyInfoScreen(route.params.journeyType),
-          })}
-        />
+        <Nav.Screen name="JourneySelection" component={JourneySelectionScreen} options={{title: 'Õpitee valik'}}/>
+        <Nav.Screen name="JourneyInfoScreen" component={JourneyInfoScreen} options={({ route }) => ({title: getTitleForJourneyInfoScreen(route.params.journeyType)})}/>
+        <Nav.Screen name="JourneyPrepScreen" component={JourneyPrepScreen} options={{title: 'Ettevalmistus'}}/>
       </Nav.Navigator> 
     </NavigationContainer>
   );

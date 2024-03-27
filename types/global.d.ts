@@ -7,6 +7,7 @@ declare type RootStackParamList = {
     Taim: undefined;
     JourneyInfoScreen: {journeyType: string} | undefined;
     PlantSelectionScreen: {journeyType: string} | undefined;
+    JourneyPrepScreen: undefined;
 }
 
 enum rolesEnum {

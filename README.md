@@ -74,6 +74,10 @@ Type ```r``` to refresh as needed.
 
 This project is licensed under the [MIT License](LICENSE).
 
+## Attributions
+
+[Seeds icons](https://www.flaticon.com/free-icons/seeds) created by imaginationlol - Flaticon
+
 ## Contact
 
 - Email: happygardentaim@gmail.com

@@ -3,20 +3,19 @@ import { View, Image, StyleSheet, Text } from 'react-native';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import * as SecureStore from 'expo-secure-store';
 
-const GET_USER_JOURNEYS = gql`
-query GetUserJourneys($userId: Int!) {
-    user(id: $userId) {
-      journeys {
-        plant {
-          taskDetails {
-            order
-            taskDetail {
-              description
-              difficulty
-              id
-              phase
-              picture
-            }
+
+const GET_USER_JOURNEY = gql`
+  query GetUserJourney($journeyId: Int!) {
+    journey(id: $journeyId) {
+      plant {
+        taskDetails {
+          order
+          taskDetail {
+            description
+            difficulty
+            id
+            phase
+            picture
           }
         }
       }
@@ -24,9 +23,11 @@ query GetUserJourneys($userId: Int!) {
   }
 `;
 
-const JourneyScreen = () => {
+const JourneyScreen = ( { route }) => {
 
   const [userId, setUserId] = useState(null);
+  const { journeyId } = route.params;
+  console.log('route.params:', route.params);
 
   useEffect(() => {
     const getUserId = async () => {
@@ -37,8 +38,8 @@ const JourneyScreen = () => {
     getUserId();
   }, []);
 
-  const { loading, error, data } = useQuery(GET_USER_JOURNEYS, {
-      variables: { userId },
+  const { loading, error, data } = useQuery(GET_USER_JOURNEY, {
+      variables: { userId, journeyId }, 
     });
 
   if (loading) {
