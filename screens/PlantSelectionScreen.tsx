@@ -5,12 +5,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import * as SecureStore from 'expo-secure-store';
 import NavigationButton from '../components/NavigationButton';
 import HomeButton from '../components/HomeButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 const CREATE_JOURNEY_MUTATION = gql`
   mutation CreateJourney($userId: Int!, $plantId: Int!) {
     createJourney(data: {userId: $userId, plantId: $plantId}) {
+      id
       user {
         name
       }
@@ -187,7 +189,19 @@ const PlantSelectionScreen = ({ navigation, route }) => {
       })
 
       console.log('Õpitee loodud', mutationData);
-      navigation.navigate('JourneyScreen');
+
+      const storeJourneyId = async (journeyId) => {
+        try {
+          await AsyncStorage.setItem('journeyId', JSON.stringify(journeyId));
+          console.log('Journey ID stored:', journeyId);
+        } catch (error) {
+          console.log('Error storing journey type:', error);
+        }
+      };
+
+      storeJourneyId(mutationData.createJourney.id);
+      
+      navigation.navigate('JourneyPrepScreen', { journeyId: mutationData.createJourney.id });
     } catch (error) {
       console.log('Mutation Error:', error);
 

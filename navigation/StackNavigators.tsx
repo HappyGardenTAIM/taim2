@@ -9,7 +9,6 @@ import { getTitleForJourneyInfoScreen } from '../helpers';
 import JourneyInfoScreen from '../screens/JourneyInfoScreen';
 import PlantSelectionScreen from '../screens/PlantSelectionScreen';
 import Loader from '../components/Loader';
-import { EXPO_PUBLIC_GRAPHQL_URL } from '@env';
 
 const Nav = createNativeStackNavigator<RootStackParamList>();
 
@@ -42,19 +41,8 @@ function StackNavigator({initialRouteName}) {
         <Nav.Screen name="UserHomeScreen" component={UserHomeScreen} options={{title: 'Kodu'}}/>  
         <Nav.Screen name="PlantSelectionScreen" component={PlantSelectionScreen} options={{title: 'Vali taim'}}/>
         <Nav.Screen name="JourneyScreen" component={JourneyScreen} options={{title: 'Õpitee'}}/>
-        <Nav.Screen 
-          name="JourneySelection" 
-          component={JourneySelectionScreen} 
-          options={{
-            title: 'Õpitee valik'
-          }}/>
-        <Nav.Screen 
-          name="JourneyInfoScreen" 
-          component={JourneyInfoScreen} 
-          options={({ route }) => ({
-            title: getTitleForJourneyInfoScreen(route.params.journeyType),
-          })}
-        />
+        <Nav.Screen name="JourneySelection" component={JourneySelectionScreen} options={{title: 'Õpitee valik'}}/>
+        <Nav.Screen name="JourneyInfoScreen" component={JourneyInfoScreen} options={({ route }) => ({title: getTitleForJourneyInfoScreen(route.params.journeyType)})}/>
       </Nav.Navigator> 
       {loading && <Loader />}
     </NavigationContainer>
