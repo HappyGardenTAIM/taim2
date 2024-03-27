@@ -78,6 +78,16 @@ Download the latest version of the app APK:
 
 This project is licensed under the [MIT License](LICENSE).
 
+## Attributions
+
+[Seeds icons](https://www.flaticon.com/free-icons/seeds) created by imaginationlol - Flaticon
+[jar icons](https://www.flaticon.com/free-icons/jar) Jar icons created by Freepik - Flaticon
+[fabric icons](https://www.flaticon.com/free-icons/fabric) Fabric icons created by Prosymbols Premium - Flaticon
+[rubber band icons](https://www.flaticon.com/free-icons/rubber-band) Rubber band icons created by Freepik - Flaticon
+[soil icons](https://www.flaticon.com/free-icons/soil) Soil icons created by Freepik - Flaticon
+[pot icons](https://www.flaticon.com/free-icons/pot) Pot icons created by Smashicons - Flaticon
+[question icons](https://www.flaticon.com/free-icons/question) Question icons created by Freepik - Flaticon
+
 ## Contact
 
 - Email: happygardentaim@gmail.com
