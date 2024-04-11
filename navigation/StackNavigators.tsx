@@ -1,17 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import UserHomeScreen from '../screens/UserHomeScreen';
 import JourneySelectionScreen from '../screens/JourneySelectionScreen'; 
 import JourneyScreen from '../screens/JourneyScreen';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { getTitleForJourneyInfoScreen } from '../helpers';
 import JourneyInfoScreen from '../screens/JourneyInfoScreen';
 import PlantSelectionScreen from '../screens/PlantSelectionScreen';
+import Loader from '../components/Loader';
+import { EXPO_PUBLIC_GRAPHQL_URL } from '@env';
 
 const Nav = createNativeStackNavigator<RootStackParamList>();
 
 function StackNavigator({initialRouteName}) {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading process (replace with actual asynchronous operation)
+    const timer = setTimeout(() => {
+      setLoading(false); // Set loading to false after a delay
+    }, 3000); // Example: Simulating a 2-second loading time
+    
+    return () => clearTimeout(timer); // Cleanup on unmount
+  }, []);
+
+  useEffect(() => {
+    // Simulate screen content loading process (replace with actual check)
+    const screenContentTimer = setTimeout(() => {
+      setLoading(false); // Set loading to false when screen content is fully loaded
+    }, 3000); // Example: Simulating a 1-second loading time for screen content
+
+    // Cleanup on unmount or when screen content is fully loaded
+    return () => clearTimeout(screenContentTimer);
+  }, []);
+
   return (
     <NavigationContainer>
       <Nav.Navigator initialRouteName={initialRouteName}>
@@ -33,8 +56,9 @@ function StackNavigator({initialRouteName}) {
           })}
         />
       </Nav.Navigator> 
+      {loading && <Loader />}
     </NavigationContainer>
   );
 }
 
-export default StackNavigator
+export default StackNavigator;
