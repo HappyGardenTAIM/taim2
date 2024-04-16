@@ -72,7 +72,7 @@ Type ```r``` to refresh as needed.
 ## Latest Release
 Download the latest version of the app APK:
 
-[Download APK](https://expo.dev/artifacts/eas/hpf7oG915bTcWDEA1Zbg88.apk)
+[Download APK](https://expo.dev/artifacts/eas/b81GrFrykLCsvDTk1NUemr.apk)
 
 ## License
 

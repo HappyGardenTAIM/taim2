@@ -2,8 +2,11 @@ name: EAS Build
 
 on:
   push:
-    tags:
-      - '*'
+     tags:
+       - 'v[0-9]+'
+       - 'v[0-9]+.[0-9]+'
+       - 'v[0-9]+.[0-9]+.[0-9]+'
+       - 'v[0-9]+.[0-9]+.[0-9]+-*'
   release:
     types: [published]
 
@@ -14,8 +17,14 @@ jobs:
     env:
       EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
       EXPO_PUBLIC_GRAPHQL_URL: ${{ secrets.EXPO_PUBLIC_GRAPHQL_URL }}
+    permissions:
+      contents: write
 
     steps:
+      - name: Exit if not on main branch
+        if: endsWith(github.event.base_ref, 'main') == false
+        run: exit -1
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -32,47 +41,39 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Extract tag name
-        id: extract-tag
-        run: echo "::set-output name=tag_name::${GITHUB_REF#refs/tags/}"
-
-      - name: Check if tag is a new version
-        id: check-version
-        run: |
-          if [[ "${{ steps.extract-tag.outputs.tag_name }}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Tag is a new version"
-            exit 0
-          else
-            echo "Tag is not a new version, skipping workflow"
-            exit 1
-          fi
-        continue-on-error: true
       
       - name: Build on EAS
-        if: steps.check-version.outputs.result == 'success'
         run: npx eas-cli build --platform android --non-interactive --no-wait
+
+      - name: Install eas-cli latest version
+        run: npm install -g eas-cli@latest
       
       - name: Get APK URL
-        if: steps.check-version.outputs.result == 'success'
         id: get-apk-url
-        run: echo "::set-output name=apk_url::$(find . -name '*.apk' -type f -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f 2-)"
-        
-      # Run the following steps only in GitHub Actions environment
-      - name: Upload APK as artifact
-        if: steps.check-version.outputs.result == 'success' && github.event_name == 'push'  # Only run this step on push events
-        uses: actions/upload-artifact@v3
-        with:
-          name: android-app
-          path: ${{ steps.get-apk-url.outputs.apk_url }}
+        run: |
+          while true; do
+            build_status=$(eas build:list --json --non-interactive --limit=1 --platform=android | jq -r '.[0].status')
+            echo "Build status is $build_status"
+            
+            if [ "$build_status" = "FINISHED" ]; then
+              apk_url=$(eas build:list --json --non-interactive --limit=1 --platform=android | jq -r '.[0].artifacts.buildUrl')
+              echo "APK_URL=$apk_url" >> "$GITHUB_OUTPUT"
+              break
+            elif [ "$build_status" == "CANCELED" ] || [ "$build_status" == "ERRORED" ]; then
+              echo "Build status is $build_status"
+              exit 1
+            else
+              echo "Build is still in progress..."
+              sleep 1800
+            fi
+          done
 
       - name: Update README with APK link
-        if: steps.check-version.outputs.result == 'success' && github.event_name == 'push'  # Only run this step on push events
         run: |
-          latest_apk_url=$(echo "${{ steps.get-apk-url.outputs.apk_url }}")
-          echo "Latest APK: [Download]($latest_apk_url)" > README.md
+          latest_apk_url=$(echo "${{ steps.get-apk-url.outputs.APK_URL }}")
+          sed -i "s#\[Download APK\].*#\[Download APK\](${latest_apk_url})#" README.md
           git add README.md
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
           git commit -m "Update README with latest APK download link" -a || true
-          git push
+          git push origin HEAD:main
