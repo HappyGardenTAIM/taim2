@@ -9,41 +9,40 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
-const CREATE_JOURNEY_MUTATION = gql`
-  mutation CreateJourney($userId: Int!, $plantId: Int!) {
-    createJourney(data: {userId: $userId, plantId: $plantId}) {
-      id
-      user {
-        name
-      }
-      plant {
-        name
-      }
-    }
-  }
-`;
-
 const PlantSelectionScreen = ({ navigation, route }) => {
 
-  const { journeyType } = route.params;
+  const journeyType = route.params.journeyType;
+  console.log('Journey Type:', journeyType);
 
   const GET_PLANT_INFO = gql`
-  query GetPlantInfo($type: PlantType!) {
-    plantList(type: $type) {
-      id
-      name
-      image
-      difficulty
-      minGrowthTime
-      maxGrowthTime
-      ${journeyType === 'SPROUT' ? 'sprout { usage, benefits }' : ''}
-      ${journeyType === 'FOOD' ? 'food { usage, benefits }' : ''}
-      ${journeyType === 'FLOWER' ? 'flower { usage, appearance }' : ''}
+    query GetPlantInfo {
+      plantList {
+        id
+        name
+        image
+        difficulty
+        minGrowthTime
+        maxGrowthTime
+        ${journeyType === 'SPROUT' ? 'sprout { usage, benefits }' : ''}
+        ${journeyType === 'FOOD' ? 'food { usage, benefits }' : ''}
+        ${journeyType === 'FLOWER' ? 'flower { usage, appearance }' : ''}
+      }
     }
-  }
-`;
+  `;  
 
-  
+  const CREATE_JOURNEY_MUTATION = gql`
+    mutation CreateJourney($userId: Int!, $plantId: Int!, $journeyType: PlantType!) {
+      createJourney(data: {userId: $userId, plantId: $plantId, type: $journeyType}) {
+        id
+        user {
+          name
+        }
+        plant {
+          name
+        }
+      }
+    }
+  `;
 
   const [selectedPlant, setSelectedPlant] = useState(null);
 
@@ -184,7 +183,8 @@ const PlantSelectionScreen = ({ navigation, route }) => {
       const { data: mutationData } = await createJourney({ 
         variables: {
           userId: userId,
-          plantId: selectedPlant.id,         
+          plantId: selectedPlant.id,
+          journeyType         
          },
       })
 
@@ -201,7 +201,7 @@ const PlantSelectionScreen = ({ navigation, route }) => {
 
       storeJourneyId(mutationData.createJourney.id);
       
-      navigation.navigate('JourneyPrepScreen', { journeyId: mutationData.createJourney.id });
+      navigation.navigate('JourneyScreen', { journeyId: mutationData.createJourney.id });
     } catch (error) {
       console.log('Mutation Error:', error);
 
