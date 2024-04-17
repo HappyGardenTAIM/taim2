@@ -136,9 +136,7 @@ const Journey = ({ route }) => {
         }
       }
 
-      setTaskArray([...sortedDoneTasks, ...sortedFilteredTasks])
-
-      
+      setTaskArray([...sortedDoneTasks, ...sortedFilteredTasks])      
     }
   }, [data])
 

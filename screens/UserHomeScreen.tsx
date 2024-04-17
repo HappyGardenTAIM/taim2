@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Image, StyleSheet, Text, View } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
 import * as SecureStore from 'expo-secure-store';
+import JourneySelector from '../components/JourneySelector';
+import { useNavigation } from '@react-navigation/native';
 
-const UserHomeScreen = () => {
-
-  const [userName, setUserName] = useState('');  
+const UserHomeScreen: React.FC = () => {
+  const [userName, setUserName] = useState<string>('');
+  const navigation = useNavigation();
 
   const fetchUserName = async () => {
     try {
@@ -21,26 +23,31 @@ const UserHomeScreen = () => {
       return '';
     }
   };
-    
+
   useEffect(() => {
     fetchUserName().then((name) => setUserName(name));
   }, []);
 
-  const buttonConfigurations = [    
-    { label: 'Minu teekond', screenName: 'JourneyScreen' },
-    { label: 'Uus teekond', screenName: 'JourneySelection' },
-    // { label: 'Minu taimed', screenName: 'FLOWERScreen' },
-    { label: 'Minu seaded', screenName: 'CompletedJourneysScreen' },
-  ];
+  const handleJourneysExistence = (hasJourneys: boolean) => {
+    if (!hasJourneys) {
+      // Redirect to JourneySelectionScreen if no journeys exist
+      navigation.navigate('JourneySelection' as never);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Image source={require('../assets/taim.png')} style={styles.splashImage}/>
-      <Text style={styles.largeText}>{userName ? `Tere, ${userName}!` : 'Tere!'}</Text>
-      <View style={styles.buttonContainer}>
+      <View style={styles.topContainer}>
+        <Image source={require('../assets/taim.png')} style={styles.splashImage}/>
+        <Text style={styles.largeText}>{userName ? `Tere, ${userName}!` : 'Tere!'}</Text>
+      </View>
+      <View style={styles.journeyContainer}>
+        <JourneySelector onJourneysExistence={handleJourneysExistence} />
+      </View>
+      <View style={styles.bottomContainer}>
         <NavigationButton 
-          buttons={buttonConfigurations}
-          buttonStyle={{width: '70%'}} />
+          buttons={[{ label: 'Tahan uut taime', screenName: 'JourneySelection' }]}
+          buttonStyle={styles.choosePlantButton} />
       </View>
     </SafeAreaView>
   );
@@ -48,28 +55,35 @@ const UserHomeScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'F5F5F5',
+    flex: 1,
+    backgroundColor: '#F5F5F5',
   },
-  buttonContainer: {
-    width: '75%',
-    marginTop: 25,
+  topContainer: {
+    alignItems: 'center',
+    paddingTop: 10,
   },
   splashImage: {
-    width: 200,
-    height: 200,
+    width: 175,
+    height: 175,
     marginBottom: 10,
-    marginTop: 30,
   },
   largeText: {
     fontSize: 34,
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginVertical: 10,
     color: '#93C385',
-    marginHorizontal: 10,
-    lineHeight: 35,
+    marginVertical: 10,
+  },
+  journeyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bottomContainer: {
+    paddingBottom: 35,
+    alignItems: 'center',
+  },
+  choosePlantButton: {
+    width: '70%',
   },
 });
 

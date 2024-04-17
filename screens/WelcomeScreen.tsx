@@ -43,13 +43,13 @@ const WelcomeScreen = () => {
 
   const [createUser, {loading: mutationLoading, error: mutationError}] = useMutation(CREATE_USER_MUTATION);
 
-  useEffect(() => {
-    if (data) {
-      // Log the list of user names to the console
-      const userNames = data.users.map((user: User) => user.name);
-      console.log('Loodud kasutajad:', userNames.join(', '));
-    }
-  }, [data]); // Run this effect whenever the data changes  
+  // useEffect(() => {
+  //   if (data) {
+  //     // Log the list of user names to the console
+  //     const userNames = data.users.map((user: User) => user.name);
+  //     console.log('Loodud kasutajad:', userNames.join(', '));
+  //   }
+  // }, [data]); // Run this effect whenever the data changes  
 
   const [name, setName] = React.useState('');
   // const [email, setEmail] = React.useState('');
