@@ -5,44 +5,73 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import * as SecureStore from 'expo-secure-store';
 import NavigationButton from '../components/NavigationButton';
 import HomeButton from '../components/HomeButton';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
+const CREATE_JOURNEY_MUTATION = gql`
+  mutation CreateJourney($userId: Int!, $plantId: Int!, $type: PlantType!) {
+    createJourney(data: {userId: $userId, plantId: $plantId, type: $type}) {
+      user {
+        name
+      }
+      plant {
+        name
+      }
+    }
+  }
+`;
 
 const PlantSelectionScreen = ({ navigation, route }) => {
 
-  const journeyType = route.params.journeyType;
-  console.log('Journey Type:', journeyType);
+  const { journeyType } = route.params;
 
   const GET_PLANT_INFO = gql`
-    query GetPlantInfo {
-      plantList {
-        id
-        name
-        image
-        difficulty
-        minGrowthTime
-        maxGrowthTime
-        ${journeyType === 'SPROUT' ? 'sprout { usage, benefits }' : ''}
-        ${journeyType === 'FOOD' ? 'food { usage, benefits }' : ''}
-        ${journeyType === 'FLOWER' ? 'flower { usage, appearance }' : ''}
+    query Plants($type: PlantType!) {
+      plants(type: $type) {
+        ... on Sprout {
+          id
+          plant {
+            id
+            name
+            image
+            minGrowthTime
+            maxGrowthTime
+            difficulty
+          }
+          usage
+          benefits
+        }
+        ... on Food {
+          id
+          plant {
+            id
+            name
+            image
+            minGrowthTime
+            maxGrowthTime
+            difficulty
+            maintenance
+          }
+          light
+          usage
+          benefits
+        }
+        ... on Flower {
+          id
+          plant {
+            id
+            name
+            image
+            minGrowthTime
+            maxGrowthTime
+            difficulty
+            maintenance
+          }
+          light
+          appearance
+          usage
+        }
       }
     }
   `;  
-
-  const CREATE_JOURNEY_MUTATION = gql`
-    mutation CreateJourney($userId: Int!, $plantId: Int!, $journeyType: PlantType!) {
-      createJourney(data: {userId: $userId, plantId: $plantId, type: $journeyType}) {
-        id
-        user {
-          name
-        }
-        plant {
-          name
-        }
-      }
-    }
-  `;
 
   const [selectedPlant, setSelectedPlant] = useState(null);
 
@@ -67,11 +96,9 @@ const PlantSelectionScreen = ({ navigation, route }) => {
   if (mutationError) {
     return <Text>Õpitee loomine ebaõnnestus</Text>
   }
-  
 
-
-  const plantList = data.plantList;
-  console.log(plantList);
+  const plants = data.plants;
+  console.log(plants);
 
   const placeholder = require('../assets/taim.png');  
 
@@ -133,28 +160,18 @@ const PlantSelectionScreen = ({ navigation, route }) => {
               <Icon name="times" size={20} color="black" />
             </TouchableOpacity>             
           
-            <Text style={styles.imageTitle}>{selectedPlant.name}</Text>
-            <Text style={styles.popupText}>{difficultyDisplayText(selectedPlant.difficulty)}</Text>
-            <Text style={styles.popupText}>Valmis {selectedPlant.minGrowthTime}-{selectedPlant.maxGrowthTime} päevaga.</Text>
-            {selectedPlant.sprout && selectedPlant.sprout.benefits && (
-              <Text style={styles.popupText}>{selectedPlant.sprout.benefits}</Text>
+            <Text style={styles.imageTitle}>{selectedPlant.plant.name}</Text>
+            <Text style={styles.popupText}>{difficultyDisplayText(selectedPlant.plant.difficulty)}</Text>
+            <Text style={styles.popupText}>Valmis {selectedPlant.plant.minGrowthTime}-{selectedPlant.plant.maxGrowthTime} päevaga.</Text>
+            {selectedPlant.benefits && (
+              <Text style={styles.popupText}>{selectedPlant.benefits}</Text>
             )}
-            {selectedPlant.sprout && selectedPlant.sprout.usage && (
-              <Text style={styles.popupText}>{selectedPlant.sprout.usage}</Text>
+            {selectedPlant.usage && (
+              <Text style={styles.popupText}>{selectedPlant.usage}</Text>
             )}
-            {selectedPlant.food && selectedPlant.food.benefits && (
-              <Text style={styles.popupText}>{selectedPlant.food.benefits}</Text>
+            {selectedPlant.appearance && (
+              <Text style={styles.popupText}>{selectedPlant.appearance}</Text>
             )}
-            {selectedPlant.food && selectedPlant.food.usage && (
-              <Text style={styles.popupText}>{selectedPlant.food.usage}</Text>
-            )}
-            {selectedPlant.flower && selectedPlant.flower.appearance && (
-              <Text style={styles.popupText}>{selectedPlant.flower.appearance}</Text>
-            )}
-            {selectedPlant.flower && selectedPlant.flower.usage && (
-              <Text style={styles.popupText}>{selectedPlant.flower.usage}</Text>
-            )}
-
           </View>
           <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.button} onPress={handleCreateJourneyPress}>
@@ -183,25 +200,13 @@ const PlantSelectionScreen = ({ navigation, route }) => {
       const { data: mutationData } = await createJourney({ 
         variables: {
           userId: userId,
-          plantId: selectedPlant.id,
-          journeyType         
+          plantId: selectedPlant.plant.id,
+          type: journeyType,         
          },
       })
 
       console.log('Õpitee loodud', mutationData);
-
-      const storeJourneyId = async (journeyId) => {
-        try {
-          await AsyncStorage.setItem('journeyId', JSON.stringify(journeyId));
-          console.log('Journey ID stored:', journeyId);
-        } catch (error) {
-          console.log('Error storing journey type:', error);
-        }
-      };
-
-      storeJourneyId(mutationData.createJourney.id);
-      
-      navigation.navigate('JourneyScreen', { journeyId: mutationData.createJourney.id });
+      navigation.navigate('JourneyScreen');
     } catch (error) {
       console.log('Mutation Error:', error);
 
@@ -212,9 +217,7 @@ const PlantSelectionScreen = ({ navigation, route }) => {
         alert('Õpitee loomine ebaõnnestus');
       }
     }
-  };
-
-  
+  };  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -225,7 +228,7 @@ const PlantSelectionScreen = ({ navigation, route }) => {
         <Text style={styles.largeText}>Vali oma taim</Text>
         
         <View style={styles.imageContainer}>
-          {plantList.map((plant, index) => (
+          {plants.map((plant, index) => (
             <TouchableOpacity
               key={index}
               style={styles.plantContainer}
@@ -233,18 +236,18 @@ const PlantSelectionScreen = ({ navigation, route }) => {
             >     
               <ImageBackground
                 defaultSource={placeholder}
-                source={{ uri: plant.image }}
+                source={{ uri: plant.plant.image }}
                 style={styles.plantImage}
-                alt={plant.name}
+                alt={plant.plant.name}
               >  
                 <View style={styles.overlay}> 
-                  <Text style={styles.imageTitle}>{plant.name}</Text>
+                  <Text style={styles.imageTitle}>{plant.plant.name}</Text>
                   <View style={styles.infoContainer}>
                     <View style={styles.infoContainer}>
-                      {renderDifficultyIcons(plant.difficulty)}
+                      {renderDifficultyIcons(plant.plant.difficulty)}
                     </View>
                     <View style={{ flex: 1 }}>
-                      <Text style={styles.imageText}>{plant.minGrowthTime}-{plant.maxGrowthTime} päeva</Text>   
+                      <Text style={styles.imageText}>{plant.plant.minGrowthTime}-{plant.plant.maxGrowthTime} päeva</Text>   
                     </View>
                   </View>                                                        
                 </View>
