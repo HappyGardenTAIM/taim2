@@ -70,6 +70,15 @@ const CREATE_TASK = gql`
   }
 `;
 
+const UPDATE_JOURNEY_DATE = gql`
+  mutation UpdateJourneyDate($journeyId: Int!, $endDate: DateTime!) {
+    updateJourneyDate(data: {journeyId: $journeyId, endDate: $endDate}) {
+      id
+      endDate
+    }
+  }
+`;
+
 const Journey = () => {
   // placeholder journeyId
   const journeyId = 1
@@ -78,8 +87,10 @@ const Journey = () => {
 
   const [errorMessage, setErrorMessage] = useState(null);
   const [errorTaskDetailId, setErrorTaskDetailId] = useState(null);
+  const [createTaskError, setCreateTaskError] = useState(null);
   
-  const [createTask] = useMutation(CREATE_TASK); 
+  const [createTask] = useMutation(CREATE_TASK);
+  const [updateJourneyDate] = useMutation(UPDATE_JOURNEY_DATE); 
   
   const { data, loading, error, refetch } = useQuery(GET_TASKDETAILS, {
     variables: { journeyId: journeyId},     
@@ -137,14 +148,30 @@ const Journey = () => {
     const lastDone = new Date().toISOString()
   
     try {
-      await createTask({ variables: { taskDetailId, journeyId, lastDone } })
+      await createTask({ variables: { taskDetailId, journeyId, lastDone } })   
       
       refetch()
-      setErrorMessage(null);
-      setErrorTaskDetailId(null); 
+
+      setCreateTaskError(null);
+      setErrorTaskDetailId(null);
+    
     } catch(error) {
+      console.error("Error creating task:", error);
       setErrorTaskDetailId(taskDetailId);
-      setErrorMessage( "Ei õnnestunud! Proovi uuesti.");
+      setCreateTaskError("Ei õnnestunud! Proovi uuesti.");
+    }
+  
+    try {
+      const lastItem = taskArray[taskArray.length - 1]
+      if (lastItem.taskDetail.id === taskDetailId) {
+        const endDate = new Date().toISOString();
+        await updateJourneyDate({ variables: { journeyId, endDate } });        
+      }
+      
+      setErrorMessage(null); 
+    } catch (error) {
+      console.error("Error updating journey end date:", error);
+      setErrorMessage("Õpitee ei salvestunud. Proovi uuesti.")
     }
   }
 
@@ -161,7 +188,7 @@ const Journey = () => {
         </TouchableOpacity>
       )}
       {errorTaskDetailId === item.taskDetail.id && (
-        <Text style={styles.errorText}>{errorMessage}</Text>
+        <Text style={styles.errorText}>{createTaskError}</Text>
       )}
     </View>
   );
@@ -181,6 +208,11 @@ const Journey = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <>
+        {errorMessage && (
+          <Text style={styles.errorText}>{errorMessage}</Text>
+        )}
+      </>
       {taskArray.length > 0 ? (
         <FlatList
           ref={flatListRef}
@@ -258,5 +290,6 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 12,
     marginHorizontal: 10,
+    textAlign: 'center',
   },
 });
