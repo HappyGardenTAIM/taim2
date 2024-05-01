@@ -87,6 +87,7 @@ This project is licensed under the [MIT License](LICENSE).
 [soil icons](https://www.flaticon.com/free-icons/soil) Soil icons created by Freepik - Flaticon
 [pot icons](https://www.flaticon.com/free-icons/pot) Pot icons created by Smashicons - Flaticon
 [question icons](https://www.flaticon.com/free-icons/question) Question icons created by Freepik - Flaticon
+[success icons](https://www.flaticon.com/free-icons/success) Success icons created by Talha Dogar - Flaticon
 
 ## Contact
 
