@@ -1,6 +1,7 @@
 import { gql, useQuery, useMutation } from "@apollo/client";
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, FlatList, StyleSheet, SafeAreaView, TouchableOpacity } from "react-native";
+import JourneyComplete from "./JourneyComplete";
 
 const GET_TASKDETAILS = gql`
   query taskDetails($journeyId: Int!) {
@@ -88,6 +89,7 @@ const Journey = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [errorTaskDetailId, setErrorTaskDetailId] = useState(null);
   const [createTaskError, setCreateTaskError] = useState(null);
+  const [journeyComplete, setJourneyComplete] = useState(false);
   
   const [createTask] = useMutation(CREATE_TASK);
   const [updateJourneyDate] = useMutation(UPDATE_JOURNEY_DATE); 
@@ -133,14 +135,10 @@ const Journey = () => {
           sortedFilteredTasks.push(filteredTypeTasks.shift())
         }
       }
-      
-      const initialIndex = sortedDoneTasks.length
 
       setTaskArray([...sortedDoneTasks, ...sortedFilteredTasks])
 
-      if (flatListRef.current && initialIndex >= 0) {
-        flatListRef.current.scrollToIndex({ index: initialIndex });
-      }
+      
     }
   }, [data])
 
@@ -165,7 +163,8 @@ const Journey = () => {
       const lastItem = taskArray[taskArray.length - 1]
       if (lastItem.taskDetail.id === taskDetailId) {
         const endDate = new Date().toISOString();
-        await updateJourneyDate({ variables: { journeyId, endDate } });        
+        await updateJourneyDate({ variables: { journeyId, endDate } });
+        setJourneyComplete(true);       
       }
       
       setErrorMessage(null); 
@@ -203,8 +202,22 @@ const Journey = () => {
     }
   };
 
-  const initialIndex = taskArray.findIndex(task => task.__typename !== 'Task');
+  let initialIndex = 0;
+  if (taskArray.length > 0) {
+    const lastTask = taskArray.length - 1;
+    const lastIndex = taskArray[lastTask];
+    if (lastIndex.__typename === 'Task') {
+      initialIndex = lastTask; // Set initialIndex to the last task index
+    } else {
+      initialIndex = taskArray.findIndex(task => task.__typename !== 'Task');
+    } 
+  }
+
   const flatListRef = useRef(null);  
+
+  if (flatListRef.current && initialIndex >= 0) {
+    flatListRef.current.scrollToIndex({ index: initialIndex });
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -222,12 +235,7 @@ const Journey = () => {
           renderItem={item}
           keyExtractor={keyExtractor}
           contentContainerStyle={styles.horizontalList}
-          initialScrollIndex={initialIndex >= 0 ? initialIndex : 0}
-          onContentSizeChange={() => {
-            if (flatListRef.current && initialIndex >= 0) {
-              flatListRef.current.scrollToIndex({ index: initialIndex });
-            }
-          }}
+          initialScrollIndex={initialIndex}
           onScrollToIndexFailed={() => {}}
           snapToAlignment="center"
           getItemLayout={(_, index) => ({
@@ -239,6 +247,7 @@ const Journey = () => {
       ) : (
         <Text>Laadin...</Text>
       )}
+      <JourneyComplete visible={journeyComplete} onClose={() => setJourneyComplete(false)} />
     </SafeAreaView>
   );
 }
