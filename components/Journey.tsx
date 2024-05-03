@@ -80,9 +80,9 @@ const UPDATE_JOURNEY_DATE = gql`
   }
 `;
 
-const Journey = () => {
-  // placeholder journeyId
-  const journeyId = 1
+const Journey = ({ route }) => {
+  
+  const journeyId = route.params.journeyId;
 
   const [taskArray, setTaskArray] = useState([]);
 
@@ -95,7 +95,7 @@ const Journey = () => {
   const [updateJourneyDate] = useMutation(UPDATE_JOURNEY_DATE); 
   
   const { data, loading, error, refetch } = useQuery(GET_TASKDETAILS, {
-    variables: { journeyId: journeyId},     
+    variables: { journeyId: journeyId },     
   })
   
   useEffect(() => {

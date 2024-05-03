@@ -30,7 +30,7 @@ const UserHomeScreen = () => {
     { label: 'Minu teekond', screenName: 'JourneyScreen' },
     { label: 'Uus teekond', screenName: 'JourneySelection' },
     // { label: 'Minu taimed', screenName: 'FLOWERScreen' },
-    { label: 'Minu seaded', screenName: 'UserHomeScreen' },
+    { label: 'Minu seaded', screenName: 'CompletedJourneysScreen' },
   ];
 
   return (

@@ -1,12 +1,13 @@
 declare type RootStackParamList = {
     Main: undefined;
     JourneySelection: {journeyType: string} | undefined;
-    JourneyScreen: undefined;
+    JourneyScreen: {journeyId: number} | undefined;
     UserHomeScreen: undefined;
     WelcomeScreen: undefined;
     Taim: undefined;
     JourneyInfoScreen: {journeyType: string} | undefined;
     PlantSelectionScreen: {journeyType: string} | undefined;
+    CompletedJourneysScreen: {journeyId: number} | undefined;
 }
 
 enum rolesEnum {
