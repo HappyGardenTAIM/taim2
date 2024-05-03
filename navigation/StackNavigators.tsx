@@ -9,6 +9,7 @@ import { getTitleForJourneyInfoScreen } from '../helpers';
 import JourneyInfoScreen from '../screens/JourneyInfoScreen';
 import PlantSelectionScreen from '../screens/PlantSelectionScreen';
 import Loader from '../components/Loader';
+import CompletedJourneysScreen from '../screens/CompletedJourneysScreen';
 
 const Nav = createNativeStackNavigator<RootStackParamList>();
 
@@ -43,6 +44,7 @@ function StackNavigator({initialRouteName}) {
         <Nav.Screen name="JourneyScreen" component={JourneyScreen} options={{title: 'Õpitee'}}/>
         <Nav.Screen name="JourneySelection" component={JourneySelectionScreen} options={{title: 'Õpitee valik'}}/>
         <Nav.Screen name="JourneyInfoScreen" component={JourneyInfoScreen} options={({ route }) => ({title: getTitleForJourneyInfoScreen(route.params.journeyType)})}/>
+        <Nav.Screen name="CompletedJourneysScreen" component={CompletedJourneysScreen} options={{title: 'Lõpetatud õpiteed'}}/>
       </Nav.Navigator> 
       {loading && <Loader />}
     </NavigationContainer>

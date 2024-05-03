@@ -15,6 +15,7 @@ const CREATE_JOURNEY_MUTATION = gql`
       plant {
         name
       }
+      id
     }
   }
 `;
@@ -206,7 +207,7 @@ const PlantSelectionScreen = ({ navigation, route }) => {
       })
 
       console.log('Õpitee loodud', mutationData);
-      navigation.navigate('JourneyScreen');
+      navigation.navigate('JourneyScreen', { journeyId: mutationData.createJourney.id });
     } catch (error) {
       console.log('Mutation Error:', error);
 

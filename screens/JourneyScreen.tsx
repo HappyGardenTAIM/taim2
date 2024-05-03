@@ -26,37 +26,10 @@ import HomeButton from '../components/HomeButton';
 
 const JourneyScreen = ( { route }) => {
 
-  // const [userId, setUserId] = useState(null);
-  // const { journeyId } = route.params;
-  // console.log('route.params:', route.params);
-
-  // useEffect(() => {
-  //   const getUserId = async () => {
-  //     const id = await SecureStore.getItemAsync('userId');
-  //     console.log('userId:', id);
-  //     setUserId(parseInt(id));
-  //   };
-  //   getUserId();
-  // }, []);
-
-  // const { loading, error, data } = useQuery(GET_USER_JOURNEY, {
-  //     variables: { userId, journeyId }, 
-  //   });
-
-  // if (loading) {
-  //   return <Text>Laadin...</Text>;
-  // }
-  
-  // if (error) {
-  //   return <Text>Tekkis viga: {error.message}</Text>;
-  // }
-
-  // if(data) {console.log(data)}
-
   return (
       <View style={styles.container}>
           <HomeButton />
-          <Journey />
+          <Journey route={route}  />
       </View>
       
   );
