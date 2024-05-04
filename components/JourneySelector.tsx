@@ -80,6 +80,14 @@ const JourneySelector: React.FC<JourneySelectorProps> = ({ onJourneysExistence }
     }
   }, [journeysData, journeysLoading, onJourneysExistence]);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      refetch();
+    });
+
+    return unsubscribe;
+  }, [navigation, refetch]);
+
   const handleJourneySelect = (journeyId: number) => {
     navigation.navigate('JourneyScreen', { journeyId });
     console.log('Selected Journey ID:', journeyId);
