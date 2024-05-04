@@ -10,7 +10,7 @@ const GET_USER_JOURNEYS = gql`
   query UserJourneys($userId: Int!) {
     user(id: $userId) {
       id
-      journeys {
+      inProgressJourneys {
         id
         startedAt
         plant {
@@ -68,8 +68,8 @@ const JourneySelector: React.FC<JourneySelectorProps> = ({ onJourneysExistence }
 
   useEffect(() => {
     if (journeysData && journeysData.user) {
-      const userHasJourneys = journeysData.user.journeys.length > 0;
-      setJourneys(journeysData.user.journeys);
+      const userHasJourneys = journeysData.user.inProgressJourneys.length > 0;
+      setJourneys(journeysData.user.inProgressJourneys);
       // Inform UserHomeScreen about the existence of journeys
       onJourneysExistence(userHasJourneys);
     } else if (!journeysLoading) {
