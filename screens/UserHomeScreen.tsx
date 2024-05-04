@@ -46,7 +46,10 @@ const UserHomeScreen: React.FC = () => {
       </View>
       <View style={styles.bottomContainer}>
         <NavigationButton 
-          buttons={[{ label: 'Tahan uut taime', screenName: 'JourneySelection' }]}
+          buttons={[
+            { label: 'Tahan uut taime', screenName: 'JourneySelection' },
+            { label: 'Kasvatatud taimed', screenName: 'CompletedJourneysScreen'}
+          ]}
           buttonStyle={styles.choosePlantButton} />
       </View>
     </SafeAreaView>
