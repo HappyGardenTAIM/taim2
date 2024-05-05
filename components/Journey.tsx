@@ -2,6 +2,7 @@ import { gql, useQuery, useMutation } from "@apollo/client";
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, FlatList, StyleSheet, SafeAreaView, TouchableOpacity } from "react-native";
 import JourneyComplete from "./JourneyComplete";
+import { getTaskInEstonian } from "../helpers";
 
 const GET_TASKDETAILS = gql`
   query taskDetails($journeyId: Int!) {
@@ -50,6 +51,9 @@ const GET_TASKDETAILS = gql`
             description
           }
         }
+      }
+      plant {
+        name
       }
     }
   }
@@ -174,10 +178,10 @@ const Journey = ({ route }) => {
 
   const item = ({item}) => (
     <View style={[styles.item, item.__typename === 'Task' ? styles.doneTask : styles.item]}>
-      <Text style={styles.title}>{item.taskDetail.taskType}</Text>
-      <Text>{item.taskDetail.description}</Text>
+      <Text style={styles.title}>{getTaskInEstonian(item.taskDetail.taskType)}</Text>
+      <Text style={styles.text}>{item.taskDetail.description}</Text>
       {item.lastDone && (
-        <Text>Last Done: {new Date(item.lastDone).toLocaleString()}</Text>
+        <Text>Tegid viimati: {new Date(item.lastDone).toLocaleString()}</Text>
       )}      
       {item.__typename !== 'Task' && (
         <TouchableOpacity style={styles.button} onPress={() => handlePress(item.taskDetail.id)}>
@@ -219,29 +223,32 @@ const Journey = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={styles.largeText}>{data?.journey.plant.name}</Text>
       <>
         {errorMessage && (
           <Text style={styles.errorText}>{errorMessage}</Text>
         )}
       </>
       {taskArray.length > 0 ? (
-        <FlatList
-          ref={flatListRef}
-          data={taskArray}
-          horizontal={true}
-          pagingEnabled={true}
-          renderItem={item}
-          keyExtractor={keyExtractor}
-          contentContainerStyle={styles.horizontalList}
-          initialScrollIndex={initialIndex}
-          onScrollToIndexFailed={() => {}}
-          snapToAlignment="center"
-          getItemLayout={(_, index) => ({
-            length: 300 + 16 * 2,
-            offset: (300 + 16*2) * index,
-            index,
-          })}
-        />
+        <View style={styles.flatListContainer}>
+          <FlatList
+            ref={flatListRef}
+            data={taskArray}
+            horizontal={true}
+            pagingEnabled={true}
+            renderItem={item}
+            keyExtractor={keyExtractor}
+            contentContainerStyle={styles.horizontalList}
+            initialScrollIndex={initialIndex}
+            onScrollToIndexFailed={() => {}}
+            snapToAlignment="center"
+            getItemLayout={(_, index) => ({
+              length: 300 + 16 * 2,
+              offset: (300 + 16*2) * index,
+              index,
+            })}
+          />
+        </View>
       ) : (
         <Text>Laadin...</Text>
       )}
@@ -255,6 +262,7 @@ export default Journey
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'flex-end',
   },
   horizontalList: {
     flexGrow: 1,
@@ -268,7 +276,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-    borderRadius: 8,
+    borderRadius: 38,
     width: 300,
     
   },
@@ -277,6 +285,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   button: {
     backgroundColor: '#caffa8',
@@ -298,5 +308,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginHorizontal: 10,
     textAlign: 'center',
+  },
+  flatListContainer: {
+    height: 350,
+    marginVertical: 20,
+  },
+  largeText: {
+    fontSize: 34,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 30,
+    color: '#93C385',
+    marginHorizontal: 10,
+    lineHeight: 35,
+  },
+  text: {
+    color: '#1C0F13',
+    fontSize: 16,
+    marginBottom: 10,
   },
 });
