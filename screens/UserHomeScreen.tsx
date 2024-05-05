@@ -7,33 +7,43 @@ import { useNavigation } from '@react-navigation/native';
 
 const UserHomeScreen: React.FC = () => {
   const [userName, setUserName] = useState<string>('');
+  const [userId, setUserId] = useState(null);
   const navigation = useNavigation();
 
-  const fetchUserName = async () => {
-    try {
-      const storedUserName = await SecureStore.getItemAsync('userName');
-      console.log('Username:', storedUserName)
-      if (!storedUserName) {
-        console.error('User name not found in SecureStore.');
-        return '';
-      }
-      return storedUserName;
-    } catch (error) {
-      console.error('Error fetching user name:', error);
-      return '';
-    }
-  };
-
   useEffect(() => {
-    fetchUserName().then((name) => setUserName(name));
+    const fetchUserName = async () => {
+      try {
+        const storedUserName = await SecureStore.getItemAsync('userName');
+        
+        console.log('Username:', storedUserName)
+
+        setUserName(storedUserName)
+        
+        if (!storedUserName) {
+          console.error('User name not found in SecureStore.');
+          return '';
+        }
+      } catch (error) {
+        console.error('Error fetching user name:', error);
+      }
+    };
+  
+    fetchUserName()
   }, []);
 
-  const handleJourneysExistence = (hasJourneys: boolean) => {
-    if (!hasJourneys) {
-      // Redirect to JourneySelectionScreen if no journeys exist
-      navigation.navigate('JourneySelection' as never);
-    }
-  };
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const storedUserId = await SecureStore.getItemAsync('userId');
+        setUserId(parseInt(storedUserId));
+      } catch (error) {
+        console.error('Error fetching user ID:', error);
+        navigation.navigate('WelcomeScreen' as never);
+      }
+    };
+
+    fetchUserId();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -42,12 +52,11 @@ const UserHomeScreen: React.FC = () => {
         <Text style={styles.largeText}>{userName ? `Tere, ${userName}!` : 'Tere!'}</Text>
       </View>
       <View style={styles.journeyContainer}>
-        <JourneySelector onJourneysExistence={handleJourneysExistence} />
+        <JourneySelector userId={userId}/>
       </View>
       <View style={styles.bottomContainer}>
         <NavigationButton 
           buttons={[
-            { label: 'Tahan uut taime', screenName: 'JourneySelection' },
             { label: 'Kasvatatud taimed', screenName: 'CompletedJourneysScreen'}
           ]}
           buttonStyle={styles.choosePlantButton} />

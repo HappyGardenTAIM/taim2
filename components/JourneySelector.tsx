@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useQuery, gql } from '@apollo/client';
 import { useNavigation } from '@react-navigation/native';
-import * as SecureStore from 'expo-secure-store';
 import NavigationButton from './NavigationButton';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -34,59 +33,39 @@ interface Journey {
 }
 
 interface JourneySelectorProps {
-  onJourneysExistence: (hasJourneys: boolean) => void;
+  userId: number | null;
 }
 
-const JourneySelector: React.FC<JourneySelectorProps> = ({ onJourneysExistence }) => {
-  const [user, setUser] = useState(null);
-  const [journeys, setJourneys] = useState<Journey[]>([]);
-  const { loading: journeysLoading, error: journeysError, data: journeysData, refetch } = useQuery(GET_USER_JOURNEYS, {
-    variables: { userId: user },
-  });
+const JourneySelector: React.FC<JourneySelectorProps> = ({ userId }) => {
   
+  const [journeys, setJourneys] = useState<Journey[]>([]);
+  const [error, setError] = useState(null);
+
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const storedUser = await SecureStore.getItemAsync('userId');
-        if (storedUser) {
-          setUser(parseInt(storedUser));
-          console.log('User ID set in selector:', parseInt(storedUser));
-        } else {
-          console.error('User ID not found in SecureStore.');
-          navigation.navigate('WelcomeScreen' as never);
-        }
-      } catch (error) {
-        console.error('Error fetching user ID:', error);
-      }
-    };
-
-    fetchUserData();
-
-  }, []);
-
-  useEffect(() => {
-    if (journeysData && journeysData.user) {
-      const userHasJourneys = journeysData.user.inProgressJourneys.length > 0;
-      setJourneys(journeysData.user.inProgressJourneys);
-      // Inform UserHomeScreen about the existence of journeys
-      onJourneysExistence(userHasJourneys);
-    } else if (!journeysLoading) {
-      // Inform UserHomeScreen that no journeys are found
-      onJourneysExistence(false);
-      // Navigate to JourneySelectionScreen if no journeys are found
-      navigation.navigate('JourneySelection' as never);
-    }
-  }, [journeysData, journeysLoading, onJourneysExistence]);
-
-  useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      refetch();
+      // Refetch journeys data when the screen gains focus
+      journeysRefetch();
     });
 
     return unsubscribe;
-  }, [navigation, refetch]);
+  }, [navigation]);
+
+  const { loading: journeysLoading, error: journeysError, data: journeysData, refetch: journeysRefetch } = useQuery(GET_USER_JOURNEYS, {
+    variables: { userId },
+    fetchPolicy: 'cache-and-network',
+    onCompleted: (data) => {
+      setJourneys(data?.user?.inProgressJourneys || []);
+    },
+    onError: (error) => {
+      setError(error);
+      console.error('Error fetching journeys:', error);
+    },
+  });
+
+  if (journeysLoading) return <Text>Laadin...</Text>;
+  if (journeysError) return <Text>Tekkis viga: {journeysError.message}</Text>;
 
   const handleJourneySelect = (journeyId: number) => {
     navigation.navigate('JourneyScreen', { journeyId });
@@ -109,19 +88,24 @@ const JourneySelector: React.FC<JourneySelectorProps> = ({ onJourneysExistence }
               </TouchableOpacity>
             ))}
           </View>
+          <NavigationButton 
+          buttons={[
+            { label: 'Tahan uut taime', screenName: 'JourneySelection' },
+          ]}
+          buttonStyle={styles.choosePlantButton} />
         </View>
       ) : (
         <View style={styles.journeyContainer}>
-        <Text style={styles.noPlantText}>Sul ei ole veel ühtegi taime</Text>
+        <Text style={styles.noPlantText}>Sul ei ole praegu ühtegi taime</Text>
         <View style={styles.bottomContainer}>
           <NavigationButton 
             buttons={[{ label: 'Vali endale taim', screenName: 'JourneySelection' }]}
             buttonStyle={styles.choosePlantButton} />
         </View>
-      </View>
+        </View>
       )}
     </View>
-  );
+  )
 };
 
 const styles = StyleSheet.create({
