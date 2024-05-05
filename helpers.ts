@@ -60,3 +60,26 @@ export const getButtonLabelForJourneyInfoScreen = (journeyType) => {
       return 'Tahan taime'
   }
 }
+
+export const getTaskInEstonian = (taskType) => {
+  switch (taskType) {
+    case 'PREP':
+      return 'Ettevalmistus';
+    case 'SOAK':
+      return 'Leota';
+    case 'RINSE':
+      return 'Loputa';
+    case 'WATER':
+      return 'Kasta';
+    case 'FERTILIZE':
+      return 'Väeta';
+    case 'PRUNE':
+      return 'Kärbi';
+    case 'HARVEST':
+      return 'Korja';
+    case 'CHECK':
+      return 'Hoolda';
+    default:
+      return '';
+  }
+}

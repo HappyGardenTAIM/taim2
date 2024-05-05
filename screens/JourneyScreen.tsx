@@ -28,7 +28,7 @@ const JourneyScreen = ( { route }) => {
 
   return (
       <View style={styles.container}>
-          <HomeButton />
+          <HomeButton size={170} />
           <Journey route={route}  />
       </View>
       
