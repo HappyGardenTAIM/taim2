@@ -9,13 +9,14 @@ const GET_USER_JOURNEYS = gql`
   query UserJourneys($userId: Int!) {
     user(id: $userId) {
       id
-      inProgressJourneys {
+      journeys {
         id
         startedAt
         plant {
           name
           image
         }
+        endDate
       }
     }
   }
@@ -38,34 +39,33 @@ interface JourneySelectorProps {
 
 const JourneySelector: React.FC<JourneySelectorProps> = ({ userId }) => {
   
-  const [journeys, setJourneys] = useState<Journey[]>([]);
-  const [error, setError] = useState(null);
+  const [inProgressJourneys, setinProgressJourneys] = useState<Journey[]>([]);
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      // Refetch journeys data when the screen gains focus
-      journeysRefetch();
-    });
+    if (userId !== null) {
+      // If userId is available, execute the query
+      refetch();
+    }
+  }, [userId]);  
 
-    return unsubscribe;
-  }, [navigation]);
-
-  const { loading: journeysLoading, error: journeysError, data: journeysData, refetch: journeysRefetch } = useQuery(GET_USER_JOURNEYS, {
+  const { loading, error, data, refetch } = useQuery(GET_USER_JOURNEYS, {
     variables: { userId },
+    skip: userId === null,
     fetchPolicy: 'cache-and-network',
-    onCompleted: (data) => {
-      setJourneys(data?.user?.inProgressJourneys || []);
-    },
-    onError: (error) => {
-      setError(error);
-      console.error('Error fetching journeys:', error);
-    },
   });
 
-  if (journeysLoading) return <Text>Laadin...</Text>;
-  if (journeysError) return <Text>Tekkis viga: {journeysError.message}</Text>;
+  useEffect(() => {
+    if (data) {
+      const journeys = data?.user?.journeys || [];
+      const inProgressJourneys = journeys.filter((journey) => journey.endDate == null);
+      setinProgressJourneys(inProgressJourneys);
+    }
+  }, [data]);
+
+  if (loading) return <Text>Laadin...</Text>;
+  if (error) return <Text>Tekkis viga: {error.message}</Text>;
 
   const handleJourneySelect = (journeyId: number) => {
     navigation.navigate('JourneyScreen', { journeyId });
@@ -74,11 +74,11 @@ const JourneySelector: React.FC<JourneySelectorProps> = ({ userId }) => {
 
   return (
     <View style={styles.container}>
-      {journeys.length > 0 ? (
+      {inProgressJourneys.length > 0 ? (
         <View style={styles.journeySelectorContainer}>
           <Text style={styles.title}>Minu taimed</Text>
           <View style={styles.journeyIdContainer}>
-            {journeys.map((journey, index) => (
+            {inProgressJourneys.map((journey, index) => (
               <TouchableOpacity 
                 key={journey.id} 
                 style={styles.journeyId} 

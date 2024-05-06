@@ -7,10 +7,10 @@ import NavigationButton from '../components/NavigationButton';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const GET_COMPLETED_JOURNEYS = gql`
-  query CompletedJourneys($userId: Int!) {
+const GET_JOURNEYS = gql`
+  query Journeys($userId: Int!) {
     user(id: $userId) {
-      completedJourneys {
+      journeys {
         id
         startedAt
         endDate
@@ -28,38 +28,44 @@ const CompletedJourneysScreen = () => {
   
   const [completedJourneys, setCompletedJourneys] = useState([]);
   const [userId, setUserId] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const userId = async () => {
-      const id = await SecureStore.getItemAsync('userId');
-      setUserId(parseInt(id));
+      try {
+        const id = await SecureStore.getItemAsync('userId');
+        setUserId(parseInt(id));
+      } catch (error) {
+        console.error('Error fetching user ID:', error);
+      }
     };
+
     userId();
   }, []);
 
-  console.log('User ID:', userId);
+  useEffect(() => {
+    refetch();
+  }, [userId]);
 
-  const { data } = useQuery(GET_COMPLETED_JOURNEYS, {
+  const { data, loading, error, refetch } = useQuery(GET_JOURNEYS, {
     variables: { userId },
-    onCompleted: (data) => {
-      setCompletedJourneys(data?.user?.completedJourneys || []);
-      setLoading(false);
-    },
-    onError: (error) => {
-      setError(error);
-      setLoading(false);
-      console.error('Error fetching completed journeys:', error);
-    },
+    skip: userId === null,
+    fetchPolicy: 'cache-and-network',
   });
+
+  useEffect(() => {
+    if (data) {
+      const journeys = data?.user?.journeys || [];
+      const completedJourneys = journeys.filter((journey) => journey.endDate !== null);
+      setCompletedJourneys(completedJourneys);
+    }
+  }, [data]);
 
   const placeholder = require('../assets/taim.png');
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   
   const handlePress = (journeyId: number) => {
-    navigation.navigate('JourneyScreen', { journeyId });
+    navigation.navigate('JourneyScreen', { journeyId: journeyId, hideModal:true }, );
   }
 
   return (
