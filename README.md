@@ -2,6 +2,11 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+## Latest Release
+Download the latest version of the app APK:
+
+[Download APK](https://expo.dev/artifacts/eas/b81GrFrykLCsvDTk1NUemr.apk)
+
 ## Description
 
 TAIM is an educational game for learning gardening basics. This is the frontend part of the project designed to work with the backend part. 
@@ -68,11 +73,6 @@ After the Metro Bundler has started, type
 ```a```
 to open app in the emulator or on the physical phone.
 Type ```r``` to refresh as needed.
-
-## Latest Release
-Download the latest version of the app APK:
-
-[Download APK](https://expo.dev/artifacts/eas/b81GrFrykLCsvDTk1NUemr.apk)
 
 ## License
 
