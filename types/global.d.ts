@@ -1,7 +1,7 @@
 declare type RootStackParamList = {
     Main: undefined;
     JourneySelection: {journeyType: string} | undefined;
-    JourneyScreen: {journeyId: number} | undefined;
+    JourneyScreen: {journeyId: number} | {hideModal: boolean} | undefined;
     UserHomeScreen: undefined;
     WelcomeScreen: undefined;
     Taim: undefined;

@@ -99,6 +99,7 @@ const Journey = ({ route }) => {
   const [errorTaskDetailId, setErrorTaskDetailId] = useState(null);
   const [createTaskError, setCreateTaskError] = useState(null);
   const [journeyComplete, setJourneyComplete] = useState(false);
+  const [modalVisible, setModalVisible] = useState(journeyComplete);
   
   const [createTask] = useMutation(CREATE_TASK);
   const [updateJourneyDate] = useMutation(UPDATE_JOURNEY_DATE); 
@@ -149,6 +150,25 @@ const Journey = ({ route }) => {
     }
   }, [data])
 
+  useEffect(() => {
+    // Check if all tasks are completed and set journey as complete
+    const lastTask = taskArray[taskArray.length - 1];
+    console.log('journeyComplete 2:', journeyComplete)
+    if (lastTask && lastTask.__typename === 'Task' && !data.journey.endDate) {      
+      const endDate = new Date().toISOString();
+      updateJourneyDate({ variables: { journeyId, endDate } })
+        .then(() => setJourneyComplete(true))
+        .then(() => setModalVisible(true))
+        .then(() => setErrorMessage(null))
+        .catch((error) => {
+          console.error("Error updating journey end date:", error)
+          setErrorMessage("Õpitee ei salvestunud. Proovi uuesti.")
+        });
+        
+    }
+  }, [taskArray]);
+
+
   const handlePress = async (taskDetailId) => {
     const lastDone = new Date().toISOString()
   
@@ -158,26 +178,11 @@ const Journey = ({ route }) => {
       refetch()
 
       setCreateTaskError(null);
-      setErrorTaskDetailId(null);
-    
+      setErrorTaskDetailId(null);    
     } catch(error) {
       console.error("Error creating task:", error);
       setErrorTaskDetailId(taskDetailId);
       setCreateTaskError("Ei õnnestunud! Proovi uuesti.");
-    }
-  
-    try {
-      const lastItem = taskArray[taskArray.length - 1]
-      if (lastItem.taskDetail.id === taskDetailId) {
-        const endDate = new Date().toISOString();
-        await updateJourneyDate({ variables: { journeyId, endDate } });
-        setJourneyComplete(true);       
-      }
-      
-      setErrorMessage(null); 
-    } catch (error) {
-      console.error("Error updating journey end date:", error);
-      setErrorMessage("Õpitee ei salvestunud. Proovi uuesti.")
     }
   }
 
@@ -225,9 +230,11 @@ const Journey = ({ route }) => {
 
   const flatListRef = useRef(null);  
 
-  if (flatListRef.current && initialIndex >= 0) {
-    flatListRef.current.scrollToIndex({ index: initialIndex });
-  }
+  useEffect(() => {
+    if (flatListRef.current && initialIndex >= 0) {
+      flatListRef.current.scrollToIndex({ index: initialIndex });
+    }
+  }, [initialIndex]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -260,7 +267,11 @@ const Journey = ({ route }) => {
       ) : (
         <Text>Laadin...</Text>
       )}
-      <JourneyComplete visible={journeyComplete} onClose={() => setJourneyComplete(false)} />
+      { route.params.hideModal ? null 
+      : (<JourneyComplete 
+        visible={modalVisible} 
+        onClose={() => setModalVisible(false)}
+        /> ) }
     </SafeAreaView>
   );
 }
