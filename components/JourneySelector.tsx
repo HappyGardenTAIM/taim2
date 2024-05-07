@@ -41,14 +41,7 @@ const JourneySelector: React.FC<JourneySelectorProps> = ({ userId }) => {
   
   const [inProgressJourneys, setinProgressJourneys] = useState<Journey[]>([]);
 
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
-
-  useEffect(() => {
-    if (userId !== null) {
-      // If userId is available, execute the query
-      refetch();
-    }
-  }, [userId]);  
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>() 
 
   const { loading, error, data, refetch } = useQuery(GET_USER_JOURNEYS, {
     variables: { userId },
@@ -57,19 +50,26 @@ const JourneySelector: React.FC<JourneySelectorProps> = ({ userId }) => {
   });
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      refetch();
+    });
+
+    return unsubscribe;
+  }, [navigation, refetch]);
+
+  useEffect(() => {
     if (data) {
       const journeys = data?.user?.journeys || [];
       const inProgressJourneys = journeys.filter((journey) => journey.endDate == null);
       setinProgressJourneys(inProgressJourneys);
     }
-  }, [data]);
+  }, [data, userId]);
 
   if (loading) return <Text>Laadin...</Text>;
   if (error) return <Text>Tekkis viga: {error.message}</Text>;
 
   const handleJourneySelect = (journeyId: number) => {
     navigation.navigate('JourneyScreen', { journeyId });
-    console.log('Selected Journey ID:', journeyId);
   };
 
   return (
