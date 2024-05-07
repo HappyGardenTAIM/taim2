@@ -150,31 +150,31 @@ const Journey = ({ route }) => {
     }
   }, [data])
 
-  useEffect(() => {
-    // Check if all tasks are completed and set journey as complete
-    const lastTask = taskArray[taskArray.length - 1];
-    console.log('journeyComplete 2:', journeyComplete)
-    if (lastTask && lastTask.__typename === 'Task' && !data.journey.endDate) {      
+  const handleJourneyComplete = () => {    
+    if (!data.journey.endDate) {      
       const endDate = new Date().toISOString();
+
       updateJourneyDate({ variables: { journeyId, endDate } })
         .then(() => setJourneyComplete(true))
-        .then(() => setModalVisible(true))
-        .then(() => setErrorMessage(null))
         .catch((error) => {
           console.error("Error updating journey end date:", error)
           setErrorMessage("Õpitee ei salvestunud. Proovi uuesti.")
-        });
-        
+        })
+        .then(() => setModalVisible(true))
+        .then(() => setErrorMessage(null)) 
     }
-  }, [taskArray]);
-
+  }
 
   const handlePress = async (taskDetailId) => {
     const lastDone = new Date().toISOString()
-  
+    const lastTask = taskArray[taskArray.length - 1];  
     try {
-      await createTask({ variables: { taskDetailId, journeyId, lastDone } })   
+      await createTask({ variables: { taskDetailId, journeyId, lastDone } }) 
       
+      if (lastTask.taskDetail.id === taskDetailId) {
+        handleJourneyComplete()
+      }
+
       refetch()
 
       setCreateTaskError(null);
