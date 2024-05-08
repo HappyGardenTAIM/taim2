@@ -19,6 +19,8 @@ const GET_JOURNEYS = gql`
           name
           image
         }
+        status
+        updatedAt
       }
     }
   }
@@ -28,6 +30,7 @@ const CompletedJourneysScreen = () => {
   
   const [completedJourneys, setCompletedJourneys] = useState([]);
   const [userId, setUserId] = useState(null);
+  const [abandonedJourneys, setAbandonedJourneys] = useState([]);
 
   useEffect(() => {
     const userId = async () => {
@@ -56,7 +59,9 @@ const CompletedJourneysScreen = () => {
     if (data) {
       const journeys = data?.user?.journeys || [];
       const completedJourneys = journeys.filter((journey) => journey.endDate !== null);
+      const abandonedJourneys = journeys.filter((journey) => journey.status === 'ABANDONED');
       setCompletedJourneys(completedJourneys);
+      setAbandonedJourneys(abandonedJourneys);
     }
   }, [data]);
 
@@ -74,24 +79,62 @@ const CompletedJourneysScreen = () => {
         <HomeButton size={200} />
         <Text style={styles.largeText}>Sinu kasvatatud taimed</Text> 
         <View>
+          <Text style={styles.title}>Lõpetatud õpiteed</Text>
+          <View style={styles.imageContainer}>
+            {loading ? (
+              <Text>Laadin...</Text>
+            ) : error ? (
+              <Text>Tekkis viga: {error.message}</Text>
+            ) : completedJourneys.length === 0 ? (
+              <View>
+                <Text style={styles.imageText}>Läbitud õpiteid ei ole</Text>
+                <NavigationButton 
+                  buttons={[
+                    {
+                      label: 'Hakka kasvatama!', 
+                      screenName: 'JourneySelection',
+                    }
+                  ]}
+                />
+              </View>
+            ) : (
+              completedJourneys.map((journey, index) => (              
+                <TouchableOpacity 
+                  key={journey.id}
+                  style={styles.plantContainer}
+                  onPress={() => handlePress(journey.id)}
+                >
+                  <ImageBackground
+                    defaultSource={placeholder}
+                    source={{ uri: journey.plant.image }}
+                    style={styles.plantImage}
+                    alt={journey.plant.name}
+                  >
+                    <View style={styles.overlay}>
+                      <Text style={styles.imageTitle}>{journey.plant.name}</Text>
+                      <View style={styles.infoContainer}>                  
+                        <View style={{ flex: 1 }}>
+                          <Text style={styles.imageText}>Alustatud: {new Date (journey.startedAt).toLocaleDateString()}{'\n'}Lõpetatud: {new Date (journey.endDate).toLocaleDateString()}</Text>
+                        </View>
+                      </View>
+                    </View>
+                  </ImageBackground>                
+                </TouchableOpacity>              
+              ))
+            )}
+          </View>
+        </View>
+      <View>
+        <Text style={styles.title}>Katkestatud õpiteed</Text>
+        <View style={styles.imageContainer}>
           {loading ? (
             <Text>Laadin...</Text>
           ) : error ? (
             <Text>Tekkis viga: {error.message}</Text>
-          ) : completedJourneys.length === 0 ? (
-            <View>
-              <Text style={styles.imageText}>Ei ole veel ühtegi taime.</Text>
-              <NavigationButton 
-                buttons={[
-                  {
-                    label: 'Hakka kasvatama!', 
-                    screenName: 'JourneySelection',
-                  }
-                ]}
-              />
-            </View>
+          ) : abandonedJourneys.length === 0 ? (
+            null
           ) : (
-            completedJourneys.map((journey, index) => (
+            abandonedJourneys.map((journey, index) => (            
             <TouchableOpacity 
               key={journey.id}
               style={styles.plantContainer}
@@ -107,16 +150,17 @@ const CompletedJourneysScreen = () => {
                   <Text style={styles.imageTitle}>{journey.plant.name}</Text>
                   <View style={styles.infoContainer}>                  
                     <View style={{ flex: 1 }}>
-                      <Text style={styles.imageText}>Algus: {new Date (journey.startedAt).toLocaleDateString()}{'\n'}Lõpp: {new Date (journey.endDate).toLocaleDateString()}</Text>
+                      <Text style={styles.imageText}>Alustatud: {new Date (journey.startedAt).toLocaleDateString()}{'\n'}Katkestatud: {new Date (journey.updatedAt).toLocaleDateString()}</Text>
                     </View>
                   </View>
                 </View>
 
-              </ImageBackground>
-            </TouchableOpacity>
-          ))
-        )}
-      </View>       
+                </ImageBackground>
+              </TouchableOpacity>
+            ))
+          )}
+        </View>
+      </View>              
       </ScrollView>
     </SafeAreaView>
   )
@@ -175,6 +219,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginVertical: 5,
+    marginHorizontal: 5,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 30,
+    color: 'black',
+    alignSelf: 'center',
+  },
+  imageContainer: {    
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginVertical: 5,
+    justifyContent: 'space-between',
+    marginHorizontal: 30,
   },
 });
 
