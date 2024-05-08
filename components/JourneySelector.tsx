@@ -17,6 +17,7 @@ const GET_USER_JOURNEYS = gql`
           image
         }
         endDate
+        status
       }
     }
   }
@@ -60,7 +61,7 @@ const JourneySelector: React.FC<JourneySelectorProps> = ({ userId }) => {
   useEffect(() => {
     if (data) {
       const journeys = data?.user?.journeys || [];
-      const inProgressJourneys = journeys.filter((journey) => journey.endDate == null);
+      const inProgressJourneys = journeys.filter((journey) => journey.endDate == null && journey.status != 'ABANDONED');
       setinProgressJourneys(inProgressJourneys);
     }
   }, [data, userId]);

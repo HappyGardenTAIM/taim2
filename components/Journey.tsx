@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { View, Text, FlatList, StyleSheet, SafeAreaView, TouchableOpacity, Image } from "react-native";
 import JourneyComplete from "./JourneyComplete";
 import { getTaskInEstonian } from "../helpers";
+import AbandonJourney from "./AbandonJourney";
 
 const GET_TASKDETAILS = gql`
   query taskDetails($journeyId: Int!) {
@@ -263,6 +264,9 @@ const Journey = ({ route }) => {
               index,
             })}
           />
+          <View>
+            <AbandonJourney journeyId={journeyId}/>
+          </View>
         </View>
       ) : (
         <Text>Laadin...</Text>
@@ -296,8 +300,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 38,
-    width: 300,
-    
+    width: 300,    
   },
   doneTask: {
     backgroundColor: '#C0C0C0',
@@ -329,14 +332,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   flatListContainer: {
-    height: 350,
+    height: 400,
     marginVertical: 20,
   },
   largeText: {
     fontSize: 34,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 30,
+    marginVertical: 15,
     color: '#93C385',
     marginHorizontal: 10,
     lineHeight: 35,
@@ -351,5 +354,9 @@ const styles = StyleSheet.create({
     height: 100, 
     marginBottom: 10, 
     borderRadius: 18 
-  }
+  },
+  buttonContainer: {
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
 });
