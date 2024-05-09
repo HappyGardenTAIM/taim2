@@ -11,6 +11,7 @@ interface User {
   email: string;
   name: string;
   role: rolesEnum;
+  createdAt: string;
 }
 
 const USERSQUERY = gql`
@@ -31,6 +32,7 @@ mutation CreateUser($name: String) {
     id
     name
     role
+    createdAt
   }
 }
 `
@@ -46,8 +48,11 @@ const WelcomeScreen = () => {
   // useEffect(() => {
   //   if (data) {
   //     // Log the list of user names to the console
-  //     const userNames = data.users.map((user: User) => user.name);
-  //     console.log('Loodud kasutajad:', userNames.join(', '));
+  //     const usersInfo = data.users.map((user: User) => ({
+  //       name: user.name,
+  //       createdAt: user.createdAt,
+  //     }));
+  //     console.log('Loodud kasutajad:', usersInfo);
   //   }
   // }, [data]); // Run this effect whenever the data changes  
 
