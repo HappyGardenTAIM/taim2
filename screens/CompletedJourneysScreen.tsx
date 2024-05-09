@@ -70,7 +70,7 @@ const CompletedJourneysScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   
   const handlePress = (journeyId: number) => {
-    navigation.navigate('JourneyScreen', { journeyId: journeyId, hideModal:true }, );
+    navigation.navigate('JourneyScreen', { journeyId: journeyId, hideModal:true}, );
   }
 
   return (

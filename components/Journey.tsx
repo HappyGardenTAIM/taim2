@@ -61,6 +61,8 @@ const GET_TASKDETAILS = gql`
       plant {
         name
       }
+      endDate
+      status
     }
   }
 `;
@@ -101,6 +103,7 @@ const Journey = ({ route }) => {
   const [createTaskError, setCreateTaskError] = useState(null);
   const [journeyComplete, setJourneyComplete] = useState(false);
   const [modalVisible, setModalVisible] = useState(journeyComplete);
+  const [disabled, setDisabled] = useState(false);
   
   const [createTask] = useMutation(CREATE_TASK);
   const [updateJourneyDate] = useMutation(UPDATE_JOURNEY_DATE); 
@@ -108,6 +111,12 @@ const Journey = ({ route }) => {
   const { data, loading, error, refetch } = useQuery(GET_TASKDETAILS, {
     variables: { journeyId: journeyId },     
   })
+
+  useEffect(() => {
+    if (data && (data.journey.endDate || data.journey.status === 'ABANDONED')) {
+      setDisabled(true);
+    }
+  }, [data])
   
   useEffect(() => {
     if (data) {
@@ -188,7 +197,7 @@ const Journey = ({ route }) => {
   }
 
   const item = ({item}) => (
-    <View style={[styles.item, item.__typename === 'Task' ? styles.doneTask : styles.item]}>
+    <View style={[styles.item, item.__typename === 'Task' || disabled ? styles.doneTask : styles.item]}>
       <Text style={styles.title}>{getTaskInEstonian(item.taskDetail.taskType)}</Text>
       
       <Image source={{ uri: item.taskDetail.picture }} style={styles.image} />
@@ -197,8 +206,8 @@ const Journey = ({ route }) => {
       {item.lastDone && (
         <Text>Tegid viimati: {new Date(item.lastDone).toLocaleString()}</Text>
       )}      
-      {item.__typename !== 'Task' && (
-        <TouchableOpacity style={styles.button} onPress={() => handlePress(item.taskDetail.id)}>
+      {item.__typename !== 'Task' && !disabled && (
+        <TouchableOpacity style={styles.button} onPress={() => handlePress(item.taskDetail.id)} disabled={disabled}>
           <Text style={styles.buttonLabel}>Tehtud!</Text>
         </TouchableOpacity>
       )}
@@ -264,9 +273,11 @@ const Journey = ({ route }) => {
               index,
             })}
           />
-          <View>
-            <AbandonJourney journeyId={journeyId}/>
-          </View>
+          {!disabled && (
+            <View>
+              <AbandonJourney journeyId={journeyId}/>            
+            </View>
+          )}
         </View>
       ) : (
         <Text>Laadin...</Text>
@@ -358,5 +369,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     justifyContent: 'center',
     marginBottom: 20,
+  },
+  disabled: {
+    backgroundColor: '#F0F0F0', // Grey background color
+    opacity: 0.5, // Reduced opacity to indicate disabled state
   },
 });
