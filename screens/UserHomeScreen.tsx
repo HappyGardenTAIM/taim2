@@ -35,7 +35,12 @@ const UserHomeScreen: React.FC = () => {
     const fetchUserId = async () => {
       try {
         const storedUserId = await SecureStore.getItemAsync('userId');
+        if (storedUserId) {
         setUserId(parseInt(storedUserId));
+        } else {
+          console.error('User ID not found in SecureStore.');
+          navigation.navigate('WelcomeScreen' as never);
+        }
       } catch (error) {
         console.error('Error fetching user ID:', error);
         navigation.navigate('WelcomeScreen' as never);
