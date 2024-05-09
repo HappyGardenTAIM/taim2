@@ -1,10 +1,10 @@
 import { View, Text, TextInput, StyleSheet, SafeAreaView, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import React, { useEffect } from 'react'
+import React from 'react'
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { validateEmail, validateName } from '../helpers';
 import * as SecureStore from 'expo-secure-store';
-import NavigationButton from '../components/NavigationButton';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 interface User {
   id: number;
@@ -39,7 +39,7 @@ mutation CreateUser($name: String) {
 
 const WelcomeScreen = () => {
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   
   const { data, loading } = useQuery(USERSQUERY);
 
@@ -114,7 +114,10 @@ const WelcomeScreen = () => {
         console.log('Network Errors:', error.networkError.result.errors);
       }
     }
-
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'UserHomeScreen' }]
+    });
     navigation.navigate('JourneySelection' as never);
   };
 
