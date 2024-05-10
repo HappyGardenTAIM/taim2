@@ -76,9 +76,9 @@ export const getTaskInEstonian = (taskType) => {
     case 'PRUNE':
       return 'Kärbi';
     case 'HARVEST':
-      return 'Korja';
+      return 'Valmis!';
     case 'CHECK':
-      return 'Hoolda';
+      return 'Kasvata';
     default:
       return '';
   }
