@@ -60,6 +60,8 @@ const GET_TASKDETAILS = gql`
       }
       plant {
         name
+        maturity
+        image
       }
       endDate
       status
@@ -199,10 +201,19 @@ const Journey = ({ route }) => {
   const item = ({item}) => (
     <View style={[styles.item, item.__typename === 'Task' || disabled ? styles.doneTask : styles.item]}>
       <Text style={styles.title}>{getTaskInEstonian(item.taskDetail.taskType)}</Text>
-      
+      {item.taskDetail.taskType === 'HARVEST' ? (
+        <Image source={{ uri: data.journey.plant.image }} style={styles.image} />
+      ) : (
       <Image source={{ uri: item.taskDetail.picture }} style={styles.image} />
-
-      <Text style={styles.text}>{item.taskDetail.description}</Text>
+      )}
+      {item.taskDetail.taskType === 'HARVEST' && (
+        <>
+        <Text style={styles.leadText}>{data.journey.plant.name} on valmis, kui:</Text>
+        <Text style={styles.text}>{data.journey.plant.maturity}</Text>
+        </>
+      )}
+      {item.taskDetail.taskType !== 'HARVEST' && (<Text style={styles.text}>{item.taskDetail.description}</Text>
+      )}      
       {item.lastDone && (
         <Text>Tegid viimati: {new Date(item.lastDone).toLocaleString()}</Text>
       )}      
@@ -343,20 +354,25 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   flatListContainer: {
-    height: 400,
-    marginVertical: 20,
+    height: 450,
+    marginVertical: 10,
   },
   largeText: {
     fontSize: 34,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginVertical: 15,
     color: '#93C385',
     marginHorizontal: 10,
     lineHeight: 35,
   },
   text: {
     color: '#1C0F13',
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  leadText: {
+    color: '#1C0F13',
+    fontWeight: 'bold',
     fontSize: 16,
     marginBottom: 10,
   },
