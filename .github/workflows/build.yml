@@ -21,10 +21,6 @@ jobs:
       contents: write
 
     steps:
-      - name: Exit if not on main branch
-        if: github.ref != 'refs/heads/main'
-        run: exit -1
-        
       - name: Checkout repository
         uses: actions/checkout@v3
 
