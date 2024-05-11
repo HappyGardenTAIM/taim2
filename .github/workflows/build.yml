@@ -72,5 +72,5 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
           git commit -m "Update README with latest APK download link" -a || true
-          git pull
+          git pull origin HEAD:main
           git push origin HEAD:main
