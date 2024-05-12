@@ -63,6 +63,8 @@ const GET_TASKDETAILS = gql`
         name
         maturity
         image
+        minGrowthTime
+        maxGrowthTime
       }
       endDate
       status
@@ -214,7 +216,9 @@ const Journey = ({ route }) => {
         </>
       )}
       {item.taskDetail.taskType !== 'HARVEST' && (<Text style={styles.text}>{item.taskDetail.description}</Text>
-      )}      
+      )}
+      {item.taskDetail.taskType === 'RINSE' && (<Text style={styles.text}>Tee seda {data.journey.plant.minGrowthTime}-{data.journey.plant.maxGrowthTime} päeva.</Text>
+      )}     
       {item.lastDone && (
         <Text>Tegid viimati: {new Date(item.lastDone).toLocaleString()}</Text>
       )}      
