@@ -4,6 +4,7 @@ import { View, Text, FlatList, StyleSheet, SafeAreaView, TouchableOpacity, Image
 import JourneyComplete from "./JourneyComplete";
 import { getTaskInEstonian } from "../helpers";
 import AbandonJourney from "./AbandonJourney";
+import Loader from "./Loader";
 
 const GET_TASKDETAILS = gql`
   query taskDetails($journeyId: Int!) {
@@ -265,39 +266,41 @@ const Journey = ({ route }) => {
           <Text style={styles.errorText}>{errorMessage}</Text>
         )}
       </>
-      {taskArray.length > 0 ? (
+      {loading ? (
+        <Loader />
+      ) : (
         <View style={styles.flatListContainer}>
-          <FlatList
-            ref={flatListRef}
-            data={taskArray}
-            horizontal={true}
-            pagingEnabled={true}
-            renderItem={item}
-            keyExtractor={keyExtractor}
-            contentContainerStyle={styles.horizontalList}
-            initialScrollIndex={initialIndex}
-            onScrollToIndexFailed={() => {}}
-            snapToAlignment="center"
-            getItemLayout={(_, index) => ({
-              length: 300 + 16 * 2,
-              offset: (300 + 16*2) * index,
-              index,
-            })}
-          />
-          {!disabled && (
+          {taskArray.length > 0 && (            
+            <FlatList
+              ref={flatListRef}
+              data={taskArray}
+              horizontal={true}
+              pagingEnabled={true}
+              renderItem={item}
+              keyExtractor={keyExtractor}
+              contentContainerStyle={styles.horizontalList}
+              initialScrollIndex={initialIndex}
+              onScrollToIndexFailed={() => {}}
+              snapToAlignment="center"
+              getItemLayout={(_, index) => ({
+                length: 300 + 16 * 2,
+                offset: (300 + 16*2) * index,
+                index,
+              })}
+            />            
+          )}
+          {taskArray.length > 0 && !disabled && (
             <View>
               <AbandonJourney journeyId={journeyId}/>            
             </View>
           )}
         </View>
-      ) : (
-        <Text>Laadin...</Text>
       )}
-      { route.params.hideModal ? null 
+      {route.params.hideModal ? null 
       : (<JourneyComplete 
         visible={modalVisible} 
         onClose={() => setModalVisible(false)}
-        /> ) }
+        /> ) }    
     </SafeAreaView>
   );
 }
