@@ -5,7 +5,6 @@ declare type RootStackParamList = {
     UserHomeScreen: undefined;
     WelcomeScreen: undefined;
     Taim: undefined;
-    JourneyInfoScreen: {journeyType: string} | undefined;
     PlantSelectionScreen: {journeyType: string} | undefined;
     CompletedJourneysScreen: {journeyId: number} | undefined;
 }

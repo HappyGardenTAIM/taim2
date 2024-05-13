@@ -6,6 +6,7 @@ import { gql, useQuery } from '@apollo/client';
 import * as SecureStore from 'expo-secure-store';
 import HomeButton from '../components/HomeButton';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import InfoButton from '../components/InfoButton';;
 
 const GET_JOURNEY_TYPES = gql`
   query GetJourneyTypes {
@@ -61,7 +62,7 @@ const JourneySelectionScreen = () => {
   
   const navigateToJourney = (journeyType: string) => {
     storeJourneyType(journeyType);
-    navigation.navigate('JourneyInfoScreen', { journeyType });
+    navigation.navigate('PlantSelectionScreen', { journeyType });
   };
 
   const storeJourneyType = async (journeyType) => {
@@ -84,13 +85,19 @@ const JourneySelectionScreen = () => {
         
           {/* Buttons */}
           {journeyTypes && journeyTypes.map((journeyType) => (
-            <TouchableOpacity
-              key={journeyType}            
-              style={styles.button}
-              onPress={() => navigateToJourney(journeyType)}
-            >
-              <Text style={styles.buttonText}>{`${journeyTypeDisplayText[journeyType]}`}</Text>
-            </TouchableOpacity>
+            <View key={journeyType} style={styles.buttonContainer}>
+              <View style={styles.journeyTypeContainer}>
+                <TouchableOpacity            
+                  style={styles.button}
+                  onPress={() => navigateToJourney(journeyType)}
+                >
+                  <Text style={styles.buttonText}>{`${journeyTypeDisplayText[journeyType]}`}</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.infoButtonContainer}>
+                <InfoButton identifier={journeyType}/>
+              </View>
+            </View>
           ))}
         
       </ScrollView>      
@@ -108,6 +115,19 @@ const styles = StyleSheet.create({
   scrollView: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  journeyTypeContainer: {    
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  infoButtonContainer: {
+    marginLeft: 10,
   },
   splashImage: {
     width: 200,
@@ -133,8 +153,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginVertical: 10,
-    width: '85%',
-    alignItems: 'center',
+    width: 250,
   },
   buttonText: {
     color: '#1C0F13',

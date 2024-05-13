@@ -29,6 +29,15 @@ const popupTexts = {
     "soak": {
         info: "Pane näiteks seemned õhtul vette likku ja hommikul võid need idandamisnõusse panna.",
     },
+    "SPROUT": {
+        info: "Lihtsaim ja kiireim viis kasvatada ise midagi värsket. Leota seemneid vees, loputa kaks korda päevas ja mõne päevaga ongi krõmpsud idud valmis!"
+    },
+    "FOOD": {
+        info: "Pane seeme mulda, anna talle päikesevalgust ja vett ning õige pea saad suhu pista midagi maitsvat!"
+    },
+    "FLOWER": {
+        info: "Kui seeme on mullas, on vaja vaid päikest, vett ja veidi kannatlikkust. Peagi saad tasuks imetleda kauneid õisi!"
+    },
   };
   
   export default popupTexts;

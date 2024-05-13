@@ -29,28 +29,30 @@ const InfoPopup = ({ content, visible, onClose }) => {
 };
 
 const styles = StyleSheet.create({
-    popupContainer: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flex: 1,    
-      },
-    popUpTextBackground: {
-        backgroundColor: '#93C392',
-        borderRadius: 30,
-        padding: 20,
-        width: '80%',
-    },
-    popupText: {
-        color: '#1C0F13',
-        fontSize: 16,
-        marginBottom: 10,        
-    },
-    closeButton: {
-        position: 'absolute',
-        top: 10,
-        right: 10,
-    },
+  popupContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,    
+  },
+  popUpTextBackground: {
+    backgroundColor: '#93C392',
+    borderRadius: 30,
+    padding: 15,
+    width: '80%',
+  },
+  popupText: {
+    color: '#1C0F13',
+    fontSize: 16,
+    marginHorizontal: 10,
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 5,
+    right: 15,
+},
 });
 
 export default InfoPopup;
