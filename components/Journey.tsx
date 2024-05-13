@@ -1,10 +1,12 @@
 import { gql, useQuery, useMutation } from "@apollo/client";
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, FlatList, StyleSheet, SafeAreaView, TouchableOpacity, Image } from "react-native";
+import { View, Text, FlatList, StyleSheet, SafeAreaView, TouchableOpacity, Image, ScrollView } from "react-native";
 import JourneyComplete from "./JourneyComplete";
 import { getTaskInEstonian } from "../helpers";
 import AbandonJourney from "./AbandonJourney";
 import Loader from "./Loader";
+import FlipCard from 'react-native-flip-card'
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const GET_TASKDETAILS = gql`
   query taskDetails($journeyId: Int!) {
@@ -16,6 +18,7 @@ const GET_TASKDETAILS = gql`
             id
             taskType
             description
+            longDescription
             picture
           }        
         }
@@ -26,6 +29,7 @@ const GET_TASKDETAILS = gql`
               id
               taskType
               description
+              longDescription
               picture
             }
           }
@@ -35,6 +39,7 @@ const GET_TASKDETAILS = gql`
               id
               taskType
               description
+              longDescription
               picture
             }
           }
@@ -44,6 +49,7 @@ const GET_TASKDETAILS = gql`
               id
               taskType
               description
+              longDescription
               picture
             }
           }
@@ -55,6 +61,7 @@ const GET_TASKDETAILS = gql`
             id
             taskType
             description
+            longDescription
             picture
           }
         }
@@ -202,35 +209,55 @@ const Journey = ({ route }) => {
   }
 
   const item = ({item}) => (
-    <View style={[styles.item, item.__typename === 'Task' || disabled ? styles.doneTask : styles.item]}>
-      <Text style={styles.title}>{getTaskInEstonian(item.taskDetail.taskType)}</Text>
-      {item.taskDetail.taskType === 'HARVEST' ? (
-        <Image source={{ uri: data.journey.plant.image }} style={styles.image} />
-      ) : (
-      <Image source={{ uri: item.taskDetail.picture }} style={styles.image} />
-      )}
-      {item.taskDetail.taskType === 'HARVEST' && (
-        <>
-        <Text style={styles.leadText}>{data.journey.plant.name} on valmis, kui:</Text>
-        <Text style={styles.text}>{data.journey.plant.maturity}</Text>
-        </>
-      )}
-      {item.taskDetail.taskType !== 'HARVEST' && (<Text style={styles.text}>{item.taskDetail.description}</Text>
-      )}
-      {item.taskDetail.taskType === 'RINSE' && (<Text style={styles.text}>Tee seda {data.journey.plant.minGrowthTime}-{data.journey.plant.maxGrowthTime} päeva.</Text>
-      )}     
-      {item.lastDone && (
-        <Text>Tegid viimati: {new Date(item.lastDone).toLocaleString()}</Text>
-      )}      
-      {item.__typename !== 'Task' && !disabled && (
-        <TouchableOpacity style={styles.button} onPress={() => handlePress(item.taskDetail.id)} disabled={disabled}>
-          <Text style={styles.buttonLabel}>Tehtud!</Text>
-        </TouchableOpacity>
-      )}
-      {errorTaskDetailId === item.taskDetail.id && (
-        <Text style={styles.errorText}>{createTaskError}</Text>
-      )}
-    </View>
+    <FlipCard
+      style={[styles.item, item.__typename === 'Task' || disabled ? styles.doneTask : styles.item]}
+      friction={6}
+      perspective={1000}
+      flipHorizontal={true}
+      flipVertical={false}
+      flip={false}
+      clickable={true}
+    >
+      <View style={[styles.item, item.__typename === 'Task' || disabled ? styles.doneTask : styles.item]}>
+        <Text style={styles.title}>{getTaskInEstonian(item.taskDetail.taskType)}</Text>
+        {item.taskDetail.taskType === 'HARVEST' ? (
+          <Image source={{ uri: data.journey.plant.image }} style={styles.image} />
+        ) : (
+          <Image source={{ uri: item.taskDetail.picture }} style={styles.image} />
+        )}
+        {item.taskDetail.taskType === 'HARVEST' && (
+          <>
+          <Text style={styles.leadText}>{data.journey.plant.name} on valmis, kui:</Text>
+          <Text style={styles.text}>{data.journey.plant.maturity}</Text>
+          </>
+        )}
+        {item.taskDetail.taskType !== 'HARVEST' && (<Text style={styles.text}>{item.taskDetail.description}</Text>
+        )}
+        {item.taskDetail.taskType === 'RINSE' && (<Text style={styles.text}>Tee seda {data.journey.plant.minGrowthTime}-{data.journey.plant.maxGrowthTime} päeva.</Text>
+        )}
+        <Icon name="rotate-right" size={25} color="#1C0F13" />
+        {item.lastDone && (
+          <Text>Tegid viimati: {new Date(item.lastDone).toLocaleString()}</Text>
+        )}      
+        {item.__typename !== 'Task' && !disabled && (
+          <TouchableOpacity style={styles.button} onPress={() => handlePress(item.taskDetail.id)} disabled={disabled}>
+            <Text style={styles.buttonLabel}>Tehtud!</Text>
+          </TouchableOpacity>
+        )}
+        {errorTaskDetailId === item.taskDetail.id && (
+          <Text style={styles.errorText}>{createTaskError}</Text>
+        )}
+      </View>
+
+      <View style={styles.flipCard}>
+        <ScrollView>
+          <Text style={styles.text}>{item.taskDetail.longDescription}</Text>
+          <View style={styles.flipCard}>
+            <Icon name="rotate-left" size={25} color="#1C0F13" />
+          </View>
+        </ScrollView>
+      </View>
+    </FlipCard>
   );
 
   const keyExtractor = (item, index) => {
@@ -376,6 +403,7 @@ const styles = StyleSheet.create({
     color: '#1C0F13',
     fontSize: 16,
     marginBottom: 10,
+    textAlign: 'justify',
   },
   leadText: {
     color: '#1C0F13',
@@ -397,4 +425,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F0F0', // Grey background color
     opacity: 0.5, // Reduced opacity to indicate disabled state
   },
+  flipCard: {
+    padding: 20,
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });

@@ -173,12 +173,13 @@ const PlantSelectionScreen = ({ navigation, route }) => {
             {selectedPlant.appearance && (
               <Text style={styles.popupText}>{selectedPlant.appearance}</Text>
             )}
-          </View>
+          
           <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.button} onPress={handleCreateJourneyPress}>
                 <Text style={styles.buttonText}>Tahan seda kasvatada</Text>
               </TouchableOpacity>
           </View> 
+          </View>
         </TouchableOpacity>
       </Modal>
     );
@@ -372,7 +373,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginVertical: 10,
     marginHorizontal: 10,
-    width: '45%',
+    width: '100%',
   },
   buttonText: {
     color: '#1C0F13',
