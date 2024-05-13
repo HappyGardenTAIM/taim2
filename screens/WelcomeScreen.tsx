@@ -1,5 +1,5 @@
 import { View, Text, TextInput, StyleSheet, SafeAreaView, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { validateEmail, validateName } from '../helpers';
 import * as SecureStore from 'expo-secure-store';
