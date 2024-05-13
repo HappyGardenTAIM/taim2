@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,        
   },
   popUpTextBackground: {
-    backgroundColor: '#93C392',
+    backgroundColor: '#93C393',
     borderRadius: 30,
     padding: 20,
     width: '80%',
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   button: {
-    backgroundColor: '#93C392',
+    backgroundColor: '#caffa8',
     padding: 15,
     borderRadius: 20,
     marginVertical: 10,
