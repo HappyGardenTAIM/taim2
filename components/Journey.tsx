@@ -7,6 +7,8 @@ import AbandonJourney from "./AbandonJourney";
 import Loader from "./Loader";
 import FlipCard from 'react-native-flip-card'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const GET_TASKDETAILS = gql`
   query taskDetails($journeyId: Int!) {
@@ -108,6 +110,8 @@ const Journey = ({ route }) => {
   
   const journeyId = route.params.journeyId;
 
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+
   const [taskArray, setTaskArray] = useState([]);
 
   const [errorMessage, setErrorMessage] = useState(null);
@@ -123,6 +127,14 @@ const Journey = ({ route }) => {
   const { data, loading, error, refetch } = useQuery(GET_TASKDETAILS, {
     variables: { journeyId: journeyId },     
   })
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      refetch();
+    });
+
+    return unsubscribe;
+  }, [navigation, refetch]);
 
   useEffect(() => {
     if (data && (data.journey.endDate || data.journey.status === 'ABANDONED')) {
@@ -235,7 +247,7 @@ const Journey = ({ route }) => {
         )}
         {item.taskDetail.taskType === 'RINSE' && (<Text style={styles.text}>Tee seda {data.journey.plant.minGrowthTime}-{data.journey.plant.maxGrowthTime} päeva.</Text>
         )}
-        <Icon name="rotate-right" size={25} color="#1C0F13" />
+        <Icon name="rotate-right" size={25} color="#1C0F13"/>
         {item.lastDone && (
           <Text>Tegid viimati: {new Date(item.lastDone).toLocaleString()}</Text>
         )}      
