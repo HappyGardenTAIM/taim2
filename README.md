@@ -5,7 +5,7 @@
 ## Latest Release
 Download the latest version of the app APK:
 
-[Download APK](https://expo.dev/artifacts/eas/2AZh1e1CcKZ61GBm8h4nX3.apk)
+[Download APK](https://expo.dev/artifacts/eas/kt1Uui5RyhAjQYdbcw5noM.apk)
 
 ## Description
 
