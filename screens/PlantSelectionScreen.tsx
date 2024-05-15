@@ -14,6 +14,7 @@ const CREATE_JOURNEY_MUTATION = gql`
       }
       plant {
         name
+        image
       }
       id
     }
@@ -175,9 +176,9 @@ const PlantSelectionScreen = ({ navigation, route }) => {
             )}
           
           <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.button} onPress={handleCreateJourneyPress}>
-                <Text style={styles.buttonText}>Tahan seda kasvatada</Text>
-              </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handleCreateJourneyPress}>
+              <Text style={styles.buttonText}>Tahan seda kasvatada</Text>
+            </TouchableOpacity>
           </View> 
           </View>
         </TouchableOpacity>
@@ -208,7 +209,7 @@ const PlantSelectionScreen = ({ navigation, route }) => {
       })
 
       console.log('Õpitee loodud', mutationData);
-      navigation.navigate('JourneyScreen', { journeyId: mutationData.createJourney.id });
+      navigation.navigate('JourneyScreen', { journeyId: mutationData.createJourney.id, plant: mutationData.createJourney.plant });
     } catch (error) {
       console.log('Mutation Error:', error);
 
@@ -219,7 +220,7 @@ const PlantSelectionScreen = ({ navigation, route }) => {
         alert('Õpitee loomine ebaõnnestus');
       }
     }
-  };  
+  };
 
   return (
     <SafeAreaView style={styles.container}>
