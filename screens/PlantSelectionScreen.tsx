@@ -268,7 +268,7 @@ const PlantSelectionScreen = ({ navigation, route }) => {
         <NavigationButton
           buttons={[
             {
-              label: 'Valin midagi muud',
+              label: 'Tahaks midagi muud',
               screenName: 'JourneySelection'
             },
           ]}

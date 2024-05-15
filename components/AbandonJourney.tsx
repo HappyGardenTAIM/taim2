@@ -42,7 +42,7 @@ const AbandonJourney: React.FC<AbandonJourneyProps> = ({ journeyId }) => {
   return (
     <View>
       <TouchableOpacity style={styles.deleteButton} onPress={toggleModal}>
-        <Text style={styles.buttonLabel}>Kustuta taim</Text>
+        <Text style={styles.buttonLabel}>Ei taha enam kasvatada</Text>
       </TouchableOpacity>
 
       {confirmDelete && (
