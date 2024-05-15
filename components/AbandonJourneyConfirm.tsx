@@ -24,12 +24,12 @@ const AbandonJourneyConfirmation: React.FC<AbandonJourneyConfirmationProps> = ({
           <TouchableOpacity style={styles.closeButton} onPress={onCancel}>
             <Icon name="times" size={20} color="black" />
           </TouchableOpacity>
-          <Text style={styles.confirmationText}>Kindel? Kõik taime andmed kustuvad!</Text>
+          <Text style={styles.confirmationText}>Kindel, et tahad otsast alustada?</Text>
           <TouchableOpacity style={styles.confirmButton} onPress={onConfirm}>
-              <Text style={styles.buttonLabel}>Jah, kustuta</Text>
+              <Text style={styles.buttonLabel}>Jah, jäta pooleli</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-              <Text style={styles.buttonLabel}>Ära kustuta</Text>
+              <Text style={styles.buttonLabel}>Kasvatan edasi</Text>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
