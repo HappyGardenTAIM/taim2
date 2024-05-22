@@ -76,7 +76,7 @@ const CompletedJourneysScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollView}>
-        <HomeButton size={200} />
+        <HomeButton size={60} />
         <Text style={styles.largeText}>Sinu kasvatatud taimed</Text> 
         <View>
           <Text style={styles.title}>Lõpetatud õpiteed</Text>
