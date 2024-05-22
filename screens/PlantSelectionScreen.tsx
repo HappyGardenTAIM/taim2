@@ -226,7 +226,7 @@ const PlantSelectionScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
 
       <ScrollView contentContainerStyle={styles.scrollView}>
-        <HomeButton size={200}/>
+        <HomeButton size={60}/>
         
         <Text style={styles.largeText}>Vali oma taim</Text>
         

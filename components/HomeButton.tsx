@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const HomeButton = ({ size = 150 }) => {
+const HomeButton = ({ size = 200 }) => {
 
     const navigation = useNavigation();
 
@@ -13,7 +13,7 @@ const HomeButton = ({ size = 150 }) => {
     return (
         <TouchableOpacity onPress={() => handlePress()}>
             <Image
-                source={require('../assets/taim.png')}
+                source={require('../assets/backHome.png')}
                 style={[styles.splashImage, { width: size, height: size }]}
             />
         </TouchableOpacity>
@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
     splashImage: {
         width: 150,
         height: 150,
-        marginBottom: 10,
-        marginTop: 30,
+        marginBottom: 50,
+        marginTop: 15,
         justifyContent: 'center',
         alignItems: 'center',
     },

@@ -21,7 +21,7 @@ const JourneyScreen = ( { route, navigation }) => {
         <TouchableOpacity style={styles.closeButton} onPress={() => navigation.navigate('UserHomeScreen')}>
         <Icon name="times" size={20} color="black" />
         </TouchableOpacity>
-        <HomeButton size={170} />
+        <HomeButton size={60} />
         <Journey route={route}  />
       </View>
       

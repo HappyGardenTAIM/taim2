@@ -77,7 +77,7 @@ const JourneySelectionScreen = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View >
-          <HomeButton size={200}/>
+          <HomeButton size={60}/>
         </View>
           <Text style={styles.largeText}>{userName ? `Tere, ${userName}!` : 'Tere!'}</Text>
         
