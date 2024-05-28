@@ -5,6 +5,7 @@ import { validateEmail, validateName } from '../helpers';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import LottieView from 'lottie-react-native';
 
 interface User {
   id: number;
@@ -150,6 +151,13 @@ const WelcomeScreen = () => {
              buttons={[{ label: 'Alusta nimeta', screenName: 'JourneySelection' }]}
              buttonStyle={{width: '55%'}}
           > */}
+
+          <LottieView
+            source={require('../assets/Animation - 1713344840213.json')}
+            autoPlay
+            loop
+            style={styles.lottieAnimation}
+          />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>      
@@ -216,5 +224,11 @@ const styles = StyleSheet.create({
     color: '#93C385',
     marginHorizontal: 10,
     lineHeight: 35,
+  },
+  lottieAnimation: {
+    width: 115,
+    height: 115,
+    alignSelf: 'center',
+    marginVertical: 75,
   },
 });
