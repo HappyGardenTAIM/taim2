@@ -62,7 +62,7 @@ export default AbandonJourney;
 
 const styles = StyleSheet.create({
   deleteButton: {
-    backgroundColor: '#c70000',
+    backgroundColor: '#FFBF00',
     padding: 15,
     borderRadius: 10,
     marginVertical: 10,
