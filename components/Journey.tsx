@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
   },
   flatListContainer: {
     height: 450,
-    marginVertical: 10,
+    marginVertical: 45,
   },
   largeText: {
     fontSize: 34,

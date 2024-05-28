@@ -6,7 +6,8 @@ import { gql, useQuery } from '@apollo/client';
 import * as SecureStore from 'expo-secure-store';
 import HomeButton from '../components/HomeButton';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import InfoButton from '../components/InfoButton';;
+import InfoButton from '../components/InfoButton';
+import LottieView from 'lottie-react-native';
 
 const GET_JOURNEY_TYPES = gql`
   query GetJourneyTypes {
@@ -100,7 +101,15 @@ const JourneySelectionScreen = () => {
             </View>
           ))}
         
-      </ScrollView>      
+      </ScrollView>
+      <View style={styles.animationContainer}>
+        <LottieView
+          source={require('../assets/Animation - 1716359926871.json')}
+          autoPlay
+          loop
+          style={styles.lottie}
+        />
+      </View>         
     </SafeAreaView>
   );
 };
@@ -140,7 +149,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
-    color: '#93C385',
+    color: '#93C392',
     marginHorizontal: 10,
     lineHeight: 35,
   },
@@ -160,6 +169,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  animationContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  lottie: {
+    width: 150,
+    height: 150,
   },
 });
 

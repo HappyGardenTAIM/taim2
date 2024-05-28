@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
     fontSize: 34,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginVertical: 40,
+    marginVertical: 10,
     color: '#93C385',
     marginHorizontal: 10,
     lineHeight: 35,

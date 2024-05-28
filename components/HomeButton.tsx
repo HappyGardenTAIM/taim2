@@ -13,7 +13,7 @@ const HomeButton = ({ size = 200 }) => {
     return (
         <TouchableOpacity onPress={() => handlePress()}>
             <Image
-                source={require('../assets/backHome.png')}
+                source={require('../assets/home.png')}
                 style={[styles.splashImage, { width: size, height: size }]}
             />
         </TouchableOpacity>
@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
     splashImage: {
         width: 150,
         height: 150,
-        marginBottom: 50,
-        marginTop: 15,
+        marginBottom: 35,
+        marginTop: 35,
         justifyContent: 'center',
         alignItems: 'center',
     },
